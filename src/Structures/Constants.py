@@ -13,22 +13,17 @@ GRAY = Color(127,127,127)
 WHITE = Color(255,255,255)
 
 Enumerator.reset("Window-Mode")
-BLIT_STRETCH = Enumerator.get_next()
-REAL_SIZE = Enumerator.get_next()
+WINDOW_BLIT_STRETCH = Enumerator.get_next()
+WINDOW_REAL_SIZE = Enumerator.get_next()
 
-Enumerator.reset("Player-Direction")
-NORTH = Enumerator.get_next()
-SOUTH = Enumerator.get_next()
-EAST = Enumerator.get_next()
-WEST = Enumerator.get_next()
+Enumerator.reset("Padding")
+RIGHT = Enumerator.get_next()
+LEFT = Enumerator.get_next()
+UP = Enumerator.get_next()
+DOWN = Enumerator.get_next()
 
-Enumerator.reset("Player-State")
-IDLE = Enumerator.get_next()
-WALK = Enumerator.get_next()
-RUN = Enumerator.get_next()
-CLIMB = Enumerator.get_next()
-PUSH = Enumerator.get_next()
-SWING = Enumerator.get_next()
-
+Enumerator.reset("Size-Boundary")
+GROW_BOUND = Enumerator.get_next()
+SHRINK_BOUND = Enumerator.get_next()
 
 

@@ -1,10 +1,17 @@
 import pygame as pg
 from .Pos import Pos
 
+from .Enumerator import Enumerator
+from . import Constants as c
+
 
 class Sprite :
 
-    def __init__( self, path: str = None, surface: pg.surface.Surface = None ) :
+    def __init__(
+            self, path: str = None,
+            surface: pg.surface.Surface = None
+
+    ) :
         self.path = path
         if path is None :
             self.__raw_image = surface
@@ -12,6 +19,7 @@ class Sprite :
             self.__raw_image = pg.image.load( path )
 
         self.auto_transform = False
+        self.max_size = None
 
         self.__x_flip = False
         self.__y_flip = False
@@ -84,6 +92,12 @@ class Sprite :
 
         return self
 
+    def transform_max_size( self,max_size:Pos ):
+        last_size = self.get_raw_size()
+        new_size = self.get_transformed_size().transform_max_size(max_size)
+
+        self.__scale.x,self.__scale.y = (last_size.x / new_size.x),(last_size.y / new_size.y)
+
 
     def transform_image( self ) :
         self.__transformed_image = self.__raw_image
@@ -94,6 +108,8 @@ class Sprite :
         if self.__angle != 0 :
             self.__transformed_image = pg.transform.rotate( self.__transformed_image, self.__angle )
 
+        if self.max_size is not None: self.transform_max_size(self.max_size)
+
         self.__transformed_image = pg.transform.scale( self.__transformed_image,
             Pos.fromTuple( self.get_raw_image().get_size() ).mult_transform( self.__scale.x,
                 self.__scale.y ).get_tuple() )
@@ -101,6 +117,12 @@ class Sprite :
         return self
 
 
-    def render( self, surface: pg.surface.Surface, center: Pos ) :
-        surface.blit( self.__transformed_image,
-            center.join( self.get_transformed_size().get_transformed_pos( mult=-0.5 ) ).get_tuple() )
+    def render( self, surface: pg.surface.Surface, top_left:Pos=None,center:Pos=None ) :
+
+        if top_left is not None: blit_point = top_left.get_tuple()
+        elif center is not None: blit_point = center.join(
+            self.get_transformed_size().get_transformed_pos( mult=-0.5 ) ).get_tuple()
+        else:
+            return
+
+        surface.blit( self.__transformed_image,blit_point)

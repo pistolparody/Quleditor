@@ -12,7 +12,7 @@ class Window :
     def __init__( self, size: Pos, mask_size: Pos, title: str, fps ,
                             render_mode:Enumerator = None) :
 
-        if render_mode is None: render_mode = Constants.BLIT_STRETCH
+        if render_mode is None: render_mode = Constants.WINDOW_BLIT_STRETCH
 
         self.is_running = True
         self.__size_changed = False
@@ -24,7 +24,7 @@ class Window :
         self.__render_mode = render_mode
 
         self.__fps = fps
-        self.__last_dropped_file = None
+        self.__last_dropped_files = []
 
         self.__window_size = size
         self.__mask_size = mask_size
@@ -67,8 +67,13 @@ class Window :
         return copy_pos
 
 
-    def get_dropped_file( self ) -> str or None :
-        return self.__last_dropped_file
+    def get_dropped_files( self ) -> list[str] :
+        return self.__last_dropped_files
+
+    def grab_dropped_files( self ) -> list[str]:
+        x = self.__last_dropped_files
+        self.__last_dropped_files = []
+        return x
 
     def set_render_mode( self , render_mode:Enumerator ):
         self.__render_mode = render_mode
@@ -92,7 +97,7 @@ class Window :
 
 
     def render_and_update( self ) :
-        if self.__render_mode == Constants.BLIT_STRETCH:
+        if self.__render_mode == Constants.WINDOW_BLIT_STRETCH:
             transformed_mask = pg.transform.scale( self.__mask, self.__window_size.get_tuple() )
 
             self.__window.blit( transformed_mask, [0, 0] )
@@ -102,6 +107,8 @@ class Window :
 
 
     def get_events( self, event_list=None ) :
+
+        dropped_files = []
 
         self.window_size_changed = False
 
@@ -118,7 +125,7 @@ class Window :
                 self.__mouse_moved = True
 
             if i.type == DROPFILE :
-                self.__last_dropped_file = i.file
+                dropped_files.append(i.file)
 
             if i.type == WINDOWENTER :
                 self.__mouse_in = True
@@ -130,6 +137,7 @@ class Window :
             if i.type == QUIT or i.type == KEYDOWN and i.key == K_ESCAPE :
                 self.is_running = False
 
+        if len(dropped_files) > 0: self.__last_dropped_files = dropped_files
 
     def tick( self ) :
         self.__clock.tick( self.__fps )
