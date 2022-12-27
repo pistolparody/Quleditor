@@ -1,5 +1,7 @@
 import pygame as pg
 
+import pathlib
+
 from Structures import Constants as c
 from Structures.Sprite import Sprite
 from Structures.Pos import Pos
@@ -10,9 +12,12 @@ from Structures.Color import Color
 class Asset :
 
     def __init__( self, path: str = None, surface: pg.surface.Surface = None ) :
-        self.path = path
+        self.path = pathlib.PurePath(path)
+        self.name = self.path.name
+        print(self.path,self.name)
+
         self.max_size = None
-        if path is not None :
+        if path is not None and surface is None:
             self.sprite = Sprite(path)
         elif surface is not None :
             self.sprite = Sprite(surface=surface)

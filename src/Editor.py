@@ -36,9 +36,9 @@ class Editor :
 
 
     def load_assets( self ):
-        assets = [Asset(surface=i) for i in
-            [safe_image_load(i) for i in self.last_dropped_files]
-            if i is not None
+        assets = [Asset(surface=i[0],path=i[1]) for i in
+            [(safe_image_load(i),i) for i in self.last_dropped_files]
+            if i[0] is not None
         ]
 
         self.asset_panel.update_assets(assets)
