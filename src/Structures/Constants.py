@@ -11,6 +11,7 @@ DARK_ICE = Color(30,43,120)
 BLACK = Color(0,0,0)
 GRAY = Color(127,127,127)
 WHITE = Color(255,255,255)
+RED = Color(255,0,0)
 
 Enumerator.reset("Window-Mode")
 WINDOW_BLIT_STRETCH = Enumerator.get_next()

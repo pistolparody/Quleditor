@@ -21,7 +21,9 @@ class Color(pg.color.Color):
 
 
     def set_alpha( self, alpha: int ) :
+
         self.a = alpha
+        return self
 
 
     def join( self, color, scale: float = 1, p_scale: float = None ) :

@@ -19,6 +19,9 @@ class Rect(pg.rect.Rect):
     def get_size( self ):
         return Pos( self.width, self.height )
 
+    def get_center( self ):
+        return self.get_size().get_transformed_pos(mult=0.5).join(self.get_pos())
+
 
     def transform_pos( self , Sum: float = 0, mult: float = 1, sum_first: bool = False ) :
         pos = self.get_pos().get_transformed_pos(Sum, mult, sum_first)

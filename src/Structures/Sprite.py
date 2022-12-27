@@ -4,28 +4,28 @@ from .Pos import Pos
 from .Enumerator import Enumerator
 from . import Constants as c
 from .Rect import Rect
+from .Pos import Pos
 
 
 class Sprite :
 
-    def __init__(
-            self, path: str = None,
-            surface: pg.surface.Surface = None
+    def __init__( self, path: str = None, surface: pg.surface.Surface = None
 
     ) :
         self.path = path
         if path is None :
             self.__raw_image = surface
         else :
-            self.__raw_image = pg.image.load( path )
+            self.__raw_image = pg.image.load(path)
 
         self.auto_transform = False
-        self.max_size = None
+        self.max_size: Pos = None
+        self.should_render_debug = False
 
         self.__x_flip = False
         self.__y_flip = False
         self.__angle = 0
-        self.__scale = Pos( 1, 1 )
+        self.__scale = Pos(1, 1)
 
         self.__transformed_image = self.__raw_image
         self.transform_image()
@@ -36,7 +36,7 @@ class Sprite :
         if path is None :
             self.__raw_image = surface
         else :
-            self.__raw_image = pg.image.load( path )
+            self.__raw_image = pg.image.load(path)
 
         self.transform_image()
 
@@ -46,11 +46,11 @@ class Sprite :
 
 
     def get_raw_size( self ) :
-        return Pos.fromTuple( self.__raw_image.get_size() )
+        return Pos.fromTuple(self.__raw_image.get_size())
 
 
     def get_transformed_size( self ) :
-        return Pos.fromTuple( self.__transformed_image.get_size() )
+        return Pos.fromTuple(self.__transformed_image.get_size())
 
 
     def get_transformed_image( self ) :
@@ -85,7 +85,7 @@ class Sprite :
 
     def reset_scale( self, scale: Pos = None ) :
         if scale is None :
-            self.__scale.reset( 1, 1 )
+            self.__scale.reset(1, 1)
         else :
             self.__scale = scale
 
@@ -93,43 +93,64 @@ class Sprite :
 
         return self
 
-    def transform_max_size( self,max_size:Pos=None ):
-        if max_size is None: max_size = self.max_size
-        if max_size is None: raise ValueError("BadInput")
+
+    def transform_max_size( self, max_size: Pos = None ) :
+        if max_size is None : max_size = self.max_size
+        if max_size is None : raise ValueError("BadInput")
 
         last_size = self.get_raw_size()
         new_size = self.get_transformed_size().transform_max_size(max_size)
 
-        self.__scale.x,self.__scale.y = (new_size.x / last_size.x),(new_size.y / last_size.y)
+        self.__scale.x, self.__scale.y = (new_size.x / last_size.x), (new_size.y / last_size.y)
 
 
     def transform_image( self ) :
         self.__transformed_image = self.__raw_image
-        if any( [self.__x_flip, self.__y_flip] ) :
-            self.__transformed_image = pg.transform.flip( self.__transformed_image, self.__x_flip,
-                self.__y_flip )
+        if any([self.__x_flip, self.__y_flip]) :
+            self.__transformed_image = pg.transform.flip(self.__transformed_image, self.__x_flip,
+                self.__y_flip)
 
         if self.__angle != 0 :
-            self.__transformed_image = pg.transform.rotate( self.__transformed_image, self.__angle )
+            self.__transformed_image = pg.transform.rotate(self.__transformed_image, self.__angle)
 
-        if self.max_size is not None: self.transform_max_size(self.max_size)
+        if self.max_size is not None : self.transform_max_size(self.max_size)
 
-        self.__transformed_image = pg.transform.scale( self.__transformed_image,
-            Pos.fromTuple( self.get_raw_image().get_size() ).mult_transform( self.__scale.x,
-                self.__scale.y ).get_tuple() )
+        self.__transformed_image = pg.transform.scale(self.__transformed_image,
+            Pos.fromTuple(self.get_raw_image().get_size()).mult_transform(self.__scale.x,
+                self.__scale.y).get_tuple())
 
         return self
 
 
-    def render( self, surface: pg.surface.Surface, top_left:Pos=None,center:Pos=None ) :
+    def render_debug(
+            self, surface: pg.surface.Surface,
+            top_left: Pos = None,  center: Pos = None ) :
 
-        if top_left is not None: blit_point = top_left
-        elif center is not None: blit_point = center.join(
-            self.get_transformed_size().get_transformed_pos( mult=-0.5 ) )
-        else:
-            return
+        if top_left is not None :
+            blit_point = top_left
+            rect_blit_point = top_left
+        elif center is not None :
+            blit_point = center.join(
+                self.get_transformed_size().get_transformed_pos(mult=-0.5))
 
-        pg.draw.rect(surface,c.WHITE,Rect.fromPos(blit_point,self.max_size))
-        pg.draw.rect(surface,c.BLACK,Rect.fromPos(blit_point,self.get_transformed_size()))
+            rect_blit_point = center.join(self.max_size.get_transformed_pos(mult=-0.5))
 
-        surface.blit( self.__transformed_image,blit_point)
+        else : raise ValueError("BadInput")
+
+        if self.max_size is not None :
+            pg.draw.rect(surface, c.DARK_ICE, Rect.fromPos(rect_blit_point, self.max_size))
+        pg.draw.rect(surface, c.BLACK, Rect.fromPos(blit_point, self.get_transformed_size()))
+
+
+    def render( self, surface: pg.surface.Surface, top_left: Pos = None, center: Pos = None ) :
+        if top_left is not None :
+            blit_point = top_left
+        elif center is not None :
+            blit_point = center.join(
+                self.get_transformed_size().get_transformed_pos(mult=-0.5))
+
+        else : raise ValueError("BadInput")
+
+        if self.should_render_debug : self.render_debug(surface, top_left, center)
+
+        surface.blit(self.__transformed_image, blit_point)

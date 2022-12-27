@@ -3,54 +3,93 @@ import pygame as pg
 from Structures import Constants as c
 from Structures.Sprite import Sprite
 from Structures.Pos import Pos
+from Structures.Rect import Rect
 from Structures.Color import Color
 
-class Asset:
-    def __init__( self , path:str=None , surface:pg.surface.Surface=None):
+
+class Asset :
+
+    def __init__( self, path: str = None, surface: pg.surface.Surface = None ) :
         self.path = path
         self.max_size = None
-        if path is not None:
+        if path is not None :
             self.sprite = Sprite(path)
-        elif surface is not None:
+        elif surface is not None :
             self.sprite = Sprite(surface=surface)
 
-        self.max_size = None
+        self.max_size: Pos = None
         self.width = None
         self.height = None
 
-        self.should_render_debug = False
+        self.should_render_debug = True
+        self.background_color = c.BLACK.copy().set_alpha(int(0.35 * 255))
 
-        self.padding = {
-            c.RIGHT:10,
-            c.LEFT:10,
-            c.UP:10,
-            c.DOWN:10
-        }
+        self.padding_left = 10
+        self.padding_right = 10
+        self.padding_top = 10
+        self.padding_bottom = 10
 
-    def set_max_size( self ,max_size:Pos):
+
+    def set_max_size( self, max_size: Pos ) :
         self.max_size = max_size
-        self.sprite.max_size = self.max_size
+        self.sprite.max_size = self.max_size.copy()
         return self
 
-    def transform_sprite( self ):
-        if self.max_size is not None:
+
+    def transform_sprite( self ) :
+        if self.max_size is not None :
             self.sprite.transform_max_size(self.max_size)
             self.sprite.transform_image()
 
 
-    def get_size( self ):
+    def set_render_debug( self, render_debug: bool = False ) :
+        self.should_render_debug = render_debug
+        self.sprite.should_render_debug = self.should_render_debug
+
+
+    def get_size( self ) :
         result = self.max_size
-        result.x += self.padding[c.LEFT]
-        result.y += self.padding[c.UP]
         return result
 
 
-    def get_width( self ):
+    def get_padded_size( self ) -> Pos :
+        result = self.max_size.copy()
+        result.x += self.padding_right + self.padding_left
+        result.y += self.padding_top + self.padding_bottom
+        return result
+
+
+    def get_width( self ) :
         return self.get_size().x
 
-    def get_height( self ):
+
+    def get_height( self ) :
         return self.get_size().y
 
+    def render_debug( self, surface: pg.surface.Surface, top_left: Pos = None, center: Pos = None ) :
+        if top_left is not None : blit_point = top_left
+        elif center is not None : blit_point = center
+        else : raise ValueError("BadInput")
 
-    def render( self , surface:pg.surface.Surface , top_left:Pos=None,center:Pos=None):
-        self.sprite.render(surface,top_left=top_left)
+        sprite_rect = Rect.fromPos(
+            Pos(blit_point.x + self.padding_left, blit_point.y + self.padding_top), self.get_size())
+
+        pg.draw.rect(surface, c.RED.copy().set_alpha(125), sprite_rect, 1)
+
+        pg.draw.rect(surface, c.WHITE, Rect.fromPos(blit_point, self.get_padded_size()), 1)
+
+    def render( self, surface: pg.surface.Surface, top_left: Pos = None, center: Pos = None ) :
+        if top_left is not None : blit_point = top_left
+        elif center is not None : blit_point = center
+        else : raise ValueError("BadInput")
+
+        sprite_rect = Rect.fromPos(
+            Pos(blit_point.x + self.padding_left, blit_point.y + self.padding_top), self.get_size())
+
+        self.sprite.render(surface, center=sprite_rect.get_center())
+
+        if self.should_render_debug:
+            self.render_debug(surface, top_left, center)
+
+
+

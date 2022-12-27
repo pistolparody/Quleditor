@@ -14,8 +14,6 @@ window = Window(Pos(1200,750),Pos(1200,750),"Quleditor",60,c.WINDOW_REAL_SIZE)
 
 editor = Editor(window.get_window_size())
 
-
-
 while window.is_running:
     events = pg.event.get()
     window.get_events(events)
