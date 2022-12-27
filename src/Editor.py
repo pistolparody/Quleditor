@@ -32,12 +32,12 @@ class Editor :
         ]
 
         self.assets_surface = pg.surface.Surface(
-            self.screen_size.get_transformed_pos(mult=0.5)
+            self.screen_size.get_transformed_pos(mult=1)
         ).convert_alpha()
 
         self.assets_surface.fill(c.GLASS)
         for i in self.assets:
-            i.set_max_size(Pos(50,50))
+            i.set_max_size(Pos(60,60))
             i.transform_sprite()
 
         blit_pos = Pos(0,0)

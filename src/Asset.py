@@ -21,10 +21,10 @@ class Asset:
         self.should_render_debug = False
 
         self.padding = {
-            c.RIGHT:0,
-            c.LEFT:0,
-            c.UP:0,
-            c.DOWN:0
+            c.RIGHT:10,
+            c.LEFT:10,
+            c.UP:10,
+            c.DOWN:10
         }
 
     def set_max_size( self ,max_size:Pos):
