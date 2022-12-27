@@ -14,6 +14,7 @@ class Asset:
         elif surface is not None:
             self.sprite = Sprite(surface=surface)
 
+        self.max_size = None
         self.width = None
         self.height = None
 
@@ -26,11 +27,23 @@ class Asset:
             c.DOWN:0
         }
 
+    def set_max_size( self ,max_size:Pos):
+        self.max_size = max_size
+        self.sprite.max_size = self.max_size
+        return self
+
+    def transform_sprite( self ):
+        if self.max_size is not None:
+            self.sprite.transform_max_size(self.max_size)
+            self.sprite.transform_image()
+
+
     def get_size( self ):
-        result = self.sprite.get_transformed_size()
+        result = self.max_size
         result.x += self.padding[c.LEFT]
         result.y += self.padding[c.UP]
         return result
+
 
     def get_width( self ):
         return self.get_size().x

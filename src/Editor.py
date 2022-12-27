@@ -37,7 +37,8 @@ class Editor :
 
         self.assets_surface.fill(c.GLASS)
         for i in self.assets:
-            pass
+            i.set_max_size(Pos(50,50))
+            i.transform_sprite()
 
         blit_pos = Pos(0,0)
         for i in self.assets:

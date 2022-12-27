@@ -3,6 +3,7 @@ from .Pos import Pos
 
 from .Enumerator import Enumerator
 from . import Constants as c
+from .Rect import Rect
 
 
 class Sprite :
@@ -92,11 +93,14 @@ class Sprite :
 
         return self
 
-    def transform_max_size( self,max_size:Pos ):
+    def transform_max_size( self,max_size:Pos=None ):
+        if max_size is None: max_size = self.max_size
+        if max_size is None: raise ValueError("BadInput")
+
         last_size = self.get_raw_size()
         new_size = self.get_transformed_size().transform_max_size(max_size)
 
-        self.__scale.x,self.__scale.y = (last_size.x / new_size.x),(last_size.y / new_size.y)
+        self.__scale.x,self.__scale.y = (new_size.x / last_size.x),(new_size.y / last_size.y)
 
 
     def transform_image( self ) :
@@ -119,10 +123,13 @@ class Sprite :
 
     def render( self, surface: pg.surface.Surface, top_left:Pos=None,center:Pos=None ) :
 
-        if top_left is not None: blit_point = top_left.get_tuple()
+        if top_left is not None: blit_point = top_left
         elif center is not None: blit_point = center.join(
-            self.get_transformed_size().get_transformed_pos( mult=-0.5 ) ).get_tuple()
+            self.get_transformed_size().get_transformed_pos( mult=-0.5 ) )
         else:
             return
+
+        pg.draw.rect(surface,c.WHITE,Rect.fromPos(blit_point,self.max_size))
+        pg.draw.rect(surface,c.BLACK,Rect.fromPos(blit_point,self.get_transformed_size()))
 
         surface.blit( self.__transformed_image,blit_point)
