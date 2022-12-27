@@ -19,6 +19,12 @@ class AssetPanel :
         self.asset_padding_top = 10
         self.asset_padding_bottom = 10
 
+        self.padded_size = self.asset_max_size.copy().join(
+            Pos(self.asset_padding_left+self.asset_padding_right,
+                self.asset_padding_bottom+self.asset_padding_top)
+        )
+
+
 
     def update_assets( self, asset_list: list[Asset] ) :
         self.assets = asset_list
@@ -27,6 +33,19 @@ class AssetPanel :
 
 
     def update_surface( self ) :
+        max_height = self.padded_size.y
+        blit_point = Pos(0, 0)
+        for _ in self.assets:
+            if blit_point.x + self.padded_size.x > self.surface_rect.width :
+                blit_point.reset(0, blit_point.y + self.padded_size.y)
+
+            blit_point.x += self.padded_size.x
+
+
+        self.surface_rect.height = max_height + blit_point.y
+
+        self.surface = pg.surface.Surface(self.surface_rect.get_size()).convert_alpha()
+
         self.surface.fill(self.background_color)
         blit_point = Pos(0, 0)
         for i in self.assets :
