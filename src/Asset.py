@@ -35,6 +35,13 @@ class Asset :
         self.sprite.max_size = self.max_size.copy()
         return self
 
+    def set_padding(self,padding_left:int=0,padding_right:int=0,
+                            padding_top:int=0,padding_bottom:int=0):
+
+        self.padding_left = padding_left
+        self.padding_right = padding_right
+        self.padding_bottom = padding_bottom
+        self.padding_top = padding_top
 
     def transform_sprite( self ) :
         if self.max_size is not None :
