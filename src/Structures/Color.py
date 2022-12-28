@@ -4,7 +4,10 @@ from . import Enumerator
 
 
 class Color(pg.color.Color):
-    def __init__(self,r:int,g:int,b:int,a:int=255):
+
+
+    def __init__(self,r:int=0,g:int=0,b:int=0,a:int=255,text:str=None):
+        if text is not None: super().__init__(text) ;return
         super().__init__(r,g,b,a)
 
     def get_tuple( self ) :

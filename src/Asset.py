@@ -7,6 +7,7 @@ from Structures.Sprite import Sprite
 from Structures.Pos import Pos
 from Structures.Rect import Rect
 from Structures.Color import Color
+import time
 
 
 class Asset :
@@ -24,8 +25,12 @@ class Asset :
         self.max_size: Pos = None
 
 
-        self.should_render_debug = True
-        self.background_color = c.BLACK.copy().set_alpha(int(0.35 * 255))
+        self.is_hovering = False
+
+        self.should_render_debug = False
+
+        self.background_color = c.P1_MINT.lerp(c.BLACK,0.6)
+        self.background_hover_color = c.P1_YELLOW.lerp(c.BLACK,0.6)
 
         self.padding_left = 10
         self.padding_right = 10
@@ -99,10 +104,17 @@ class Asset :
         sprite_rect = Rect.fromPos(
             Pos(blit_point.x + self.padding_left, blit_point.y + self.padding_top), self.get_size())
 
+        color = self.background_color
+        if self.is_hovering :
+            color = self.background_hover_color
+
+        pg.draw.rect(surface, color, sprite_rect)
+
         self.sprite.render(surface, center=sprite_rect.get_center())
 
         if self.should_render_debug:
             self.render_debug(surface, top_left, center)
+
 
 
 

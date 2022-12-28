@@ -13,6 +13,13 @@ GRAY = Color(127,127,127)
 WHITE = Color(255,255,255)
 RED = Color(255,0,0)
 
+P1_MINT = Color(text="#C0EEE4")
+P1_YELLOW = Color(text="#F8F988")
+P1_PEACH = Color(text="#FFCAC8")
+
+
+
+
 Enumerator.reset("Window-Mode")
 WINDOW_BLIT_STRETCH = Enumerator.get_next()
 WINDOW_REAL_SIZE = Enumerator.get_next()

@@ -18,13 +18,13 @@ class AssetPanel :
         self.asset_padding_right = 10
         self.asset_padding_top = 10
         self.asset_padding_bottom = 10
-
         self.mouse_pos = Pos(0, 0)
 
         self.padded_size = self.asset_max_size.copy().join(
             Pos(self.asset_padding_left + self.asset_padding_right,
                 self.asset_padding_bottom + self.asset_padding_top))
 
+        self.last_hovering_data = []
 
     def update_assets( self, asset_list: list[Asset] ) :
         self.assets = asset_list
@@ -69,10 +69,25 @@ class AssetPanel :
 
 
     def check_events( self ) :
+        hovering_data = []
+
         if self.surface_rect.collidepoint(self.mouse_pos):
             for i in self.assets:
-                if i.rect.collidepoint(self.mouse_pos):
-                    print(i.name)
+                i.is_hovering = i.rect.collidepoint(self.mouse_pos)
+                hovering_data.append(i.is_hovering)
+
+            if hovering_data != self.last_hovering_data:
+                self.update_surface()
+            self.last_hovering_data = hovering_data
+
+        else:
+            for i in self.assets:
+                i.is_hovering = False
+
+            if hovering_data != self.last_hovering_data:
+                self.last_hovering_data = hovering_data
+                self.update_surface()
+
 
 
     def render( self, surface: pg.surface.Surface ) :
