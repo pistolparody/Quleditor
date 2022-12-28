@@ -27,6 +27,8 @@ class AssetPanel :
             Pos(self.asset_padding_left + self.asset_padding_right,
                 self.asset_padding_bottom + self.asset_padding_top))
 
+        self.was_updated = False
+
         self.last_hovering_data = []
         self.selected_index = None
         self.held_keys = []
@@ -74,6 +76,7 @@ class AssetPanel :
         if mouse_pos is not None : self.mouse_pos.reset(mouse_pos.x, mouse_pos.y)
         mouse_presses = pg.mouse.get_pressed()
         self.held_keys.clear()
+
         if event_list is not None :
 
             for i in event_list :
@@ -93,7 +96,7 @@ class AssetPanel :
 
     def check_events( self ) :
         hovering_data = []
-
+        self.was_updated = False
 
         if self.selected_index is not None and c.MOUSE_LEFT in self.held_keys:
             print(self.assets[self.selected_index].name,time.time())
@@ -109,6 +112,8 @@ class AssetPanel :
 
             if hovering_data != self.last_hovering_data :
                 self.update_surface()
+                self.was_updated = True
+
             self.last_hovering_data = hovering_data
 
         else :
@@ -118,6 +123,7 @@ class AssetPanel :
             if hovering_data != self.last_hovering_data :
                 self.last_hovering_data = hovering_data
                 self.update_surface()
+                self.was_updated = True
 
 
     def render( self, surface: pg.surface.Surface ) :

@@ -34,9 +34,9 @@ while window.is_running:
 
     if check_fps:
         frames += 1
-        if frames >= 60:
-            frames = 0
+        if frames % 60 == 0:
             t = time.time() - l_time
+
             print("approximate fps:",round(60 / t))
 
             l_time = time.time()
