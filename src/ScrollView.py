@@ -27,6 +27,9 @@ class ScrollView :
         self.surface.fill(self.background_color)
         self.update_surface(True)
 
+    def get_content_height( self , number:int ):
+        return sum([i.get_height() for i in self.content_list[:number]])
+
     def update_surface( self , initial_update:bool=False) :
         if initial_update: self.scroll_rel.reset()
 
