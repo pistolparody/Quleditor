@@ -14,7 +14,8 @@ class ScrollView :
         self.scroll_rel = Pos(0,0)
         self.scroll_request = Pos(0,0)
         self.scroll_timer = 0
-        self.scroll_interval = 1
+        self.scroll_interval = 0.3
+
 
         self.rect = surface_rect
         self.background_color: Color = c.WOODEN.copy().lerp(c.BLACK,0.3)
@@ -57,11 +58,16 @@ class ScrollView :
 
     def check_events( self ) :
         if self.scroll_request.y!=0:
+            print(self.rect,self.scroll_rel,self.content_height)
             self.scroll_rel.y += self.scroll_request.y
-            if self.scroll_rel.y < -self.content_height + self.rect.height/2:
-                self.scroll_rel.y = self.rect.height/2
-            if self.scroll_rel.y > self.rect.height/2:
-                self.scroll_rel.y = -self.content_height + self.rect.height/2
+            if self.scroll_rel.y > self.rect.y:
+                self.scroll_rel.y = 0
+                self.scroll_request.reset()
+
+            if self.content_height + self.scroll_rel.y < self.rect.height:
+                self.scroll_rel.y -= self.scroll_request.y
+                self.scroll_request.reset()
+
 
             self.update_surface()
             current_time = time.time()

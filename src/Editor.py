@@ -28,10 +28,6 @@ class Editor :
 
         self.scroll_view = ScrollView(Rect(0, 0, screen_size.x * 0.7, screen_size.y))
 
-        self.asset_panel_0 = AssetPanel(Rect(0, 0, screen_size.x * 0.7, screen_size.y))
-        self.asset_panel_0.background_color = c.WHITE.copy().lerp(c.DARK_BLUE,0.8)
-        self.asset_panel_0.update_surface()
-
         self.asset_panel = AssetPanel(Rect(0, 0, screen_size.x * 0.7, screen_size.y))
         self.asset_panel.update_surface()
         self.load_assets()
@@ -48,12 +44,6 @@ class Editor :
         self.asset_panel.get_events(event_list=event_list, mouse_pos=m_pos)
 
 
-        m_pos_0 = m_pos.copy()
-        m_pos_0.y -= self.scroll_view.get_content_height(1)
-
-
-        self.asset_panel_0.get_events(event_list=event_list, mouse_pos=m_pos_0  )
-
         for i in event_list :
             if i.type == MOUSEWHEEL :
                 self.scroll_view.scroll_request.y = i.y
@@ -66,9 +56,9 @@ class Editor :
             [(safe_image_load(i), i) for i in self.last_dropped_files] if i[0] is not None]
 
         self.asset_panel.update_assets(assets)
-        self.asset_panel_0.update_assets(assets)
 
-        self.scroll_view.content_list = [self.asset_panel.surface, self.asset_panel_0.surface]
+
+        self.scroll_view.content_list = [self.asset_panel.surface]
         self.scroll_view.update_surface(True)
 
 
@@ -76,9 +66,9 @@ class Editor :
         if len(self.last_dropped_files) : self.load_assets()
 
         self.asset_panel.check_events()
-        self.asset_panel_0.check_events()
-        if self.asset_panel.was_updated or self.asset_panel_0.was_updated :
-            self.scroll_view.content_list = [self.asset_panel.surface, self.asset_panel_0.surface]
+
+        if self.asset_panel.was_updated :
+            self.scroll_view.content_list = [self.asset_panel.surface]
             self.scroll_view.update_surface(False)
 
         self.scroll_view.check_events()
