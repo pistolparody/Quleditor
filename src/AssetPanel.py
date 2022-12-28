@@ -1,10 +1,13 @@
 import pygame as pg
+from pygame.locals import *
+
+import time
 
 from Asset import Asset
 from Structures.Rect import Rect
 from Structures.Pos import Pos
 from Structures import Constants as c
-
+from Structures.Enumerator import Enumerator
 
 class AssetPanel :
 
@@ -25,6 +28,9 @@ class AssetPanel :
                 self.asset_padding_bottom + self.asset_padding_top))
 
         self.last_hovering_data = []
+        self.selected_index = None
+        self.held_keys = []
+
 
     def update_assets( self, asset_list: list[Asset] ) :
         self.assets = asset_list
@@ -58,36 +64,60 @@ class AssetPanel :
             if blit_point.x + padded_size.x > self.surface_rect.width :
                 blit_point.reset(0, blit_point.y + padded_size.y)
 
-            i.rect.reset_pos(blit_point.x,blit_point.y)
+            i.rect.reset_pos(blit_point.x, blit_point.y)
 
             i.render(self.surface)
             blit_point.x += padded_size.x
 
 
-    def get_events( self, mouse_pos: Pos = None ) :
-        if mouse_pos is not None: self.mouse_pos.reset(mouse_pos.x,mouse_pos.y)
+    def get_events( self, event_list: list = None, mouse_pos: Pos = None ) :
+        if mouse_pos is not None : self.mouse_pos.reset(mouse_pos.x, mouse_pos.y)
+        mouse_presses = pg.mouse.get_pressed()
+        self.held_keys.clear()
+        if event_list is not None :
+
+            for i in event_list :
+
+                if i.type == MOUSEBUTTONDOWN :
+                    for d in zip(c.MOUSE_KEYS.data, mouse_presses) :
+                        if d[1] :
+                            if d[0] not in self.held_keys :
+                                self.held_keys.append(d[0])
+
+                elif i.type == MOUSEBUTTONUP :
+                    for d in zip(c.MOUSE_KEYS.data, mouse_presses) :
+                        if not d[1] :
+                            if d[0] in self.held_keys :
+                                self.held_keys.remove(d[0])
 
 
     def check_events( self ) :
         hovering_data = []
 
-        if self.surface_rect.collidepoint(self.mouse_pos):
-            for i in self.assets:
-                i.is_hovering = i.rect.collidepoint(self.mouse_pos)
-                hovering_data.append(i.is_hovering)
 
-            if hovering_data != self.last_hovering_data:
+        if self.selected_index is not None and c.MOUSE_LEFT in self.held_keys:
+            print(self.assets[self.selected_index].name,time.time())
+
+        if self.surface_rect.collidepoint(self.mouse_pos) :
+            counter = 0
+            for i in self.assets :
+                i.is_hovering = i.rect.collidepoint(self.mouse_pos)
+                if i.is_hovering:
+                    self.selected_index = counter
+                hovering_data.append(i.is_hovering)
+                counter += 1
+
+            if hovering_data != self.last_hovering_data :
                 self.update_surface()
             self.last_hovering_data = hovering_data
 
-        else:
-            for i in self.assets:
+        else :
+            for i in self.assets :
                 i.is_hovering = False
 
-            if hovering_data != self.last_hovering_data:
+            if hovering_data != self.last_hovering_data :
                 self.last_hovering_data = hovering_data
                 self.update_surface()
-
 
 
     def render( self, surface: pg.surface.Surface ) :

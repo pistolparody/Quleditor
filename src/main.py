@@ -17,6 +17,7 @@ editor = Editor(window.get_window_size())
 
 frames = 0
 l_time = time.time()
+check_fps = False
 
 while window.is_running:
     events = pg.event.get()
@@ -30,10 +31,14 @@ while window.is_running:
 
     editor.render(window.get_window())
     window.render_and_update()
-    frames += 1
-    if frames >= 60:
-        frames = 0
-        print(time.time()-l_time)
-        l_time = time.time()
+
+    if check_fps:
+        frames += 1
+        if frames >= 60:
+            frames = 0
+            t = time.time() - l_time
+            print("approximate fps:",round(60 / t))
+
+            l_time = time.time()
 
 

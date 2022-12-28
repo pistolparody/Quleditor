@@ -35,7 +35,7 @@ class Editor :
     def get_events( self, event_list: list = None,mouse_pos:Pos=None) :
         if event_list is None: event_list = []
         if mouse_pos is not None: self.mouse_pos.reset(mouse_pos.x,mouse_pos.y)
-        self.asset_panel.get_events(self.mouse_pos)
+        self.asset_panel.get_events(event_list=event_list,mouse_pos=self.mouse_pos)
         for i in event_list:
             # if i.type == MOUSEWHEEL:
             #     self.scroll_view.scroll_request.y = i.y

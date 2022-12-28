@@ -24,14 +24,8 @@ Enumerator.reset("Window-Mode")
 WINDOW_BLIT_STRETCH = Enumerator.get_next()
 WINDOW_REAL_SIZE = Enumerator.get_next()
 
-Enumerator.reset("Padding")
-RIGHT = Enumerator.get_next()
-LEFT = Enumerator.get_next()
-UP = Enumerator.get_next()
-DOWN = Enumerator.get_next()
-
-Enumerator.reset("Size-Boundary")
-GROW_BOUND = Enumerator.get_next()
-SHRINK_BOUND = Enumerator.get_next()
-
-
+Enumerator.reset("Event")
+MOUSE_LEFT = Enumerator.get_next()
+MOUSE_MIDDLE = Enumerator.get_next()
+MOUSE_RIGHT = Enumerator.get_next()
+MOUSE_KEYS = Enumerator.get_next([MOUSE_LEFT,MOUSE_MIDDLE,MOUSE_RIGHT])
