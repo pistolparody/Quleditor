@@ -53,6 +53,7 @@ class Window :
     def get_mask_size( self ) -> Pos :
         return self.__mask_size
 
+
     def get_mouse_pos( self ) -> Pos :
         return self.__mouse_pos
 

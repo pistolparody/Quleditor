@@ -17,7 +17,7 @@ editor = Editor(window.get_window_size())
 while window.is_running:
     events = pg.event.get()
     window.get_events(events)
-    editor.get_events(events)
+    editor.get_events(event_list=events,mouse_pos=window.get_mouse_pos())
 
     editor.last_dropped_files = window.grab_dropped_files()
 

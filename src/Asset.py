@@ -14,7 +14,6 @@ class Asset :
     def __init__( self, path: str = None, surface: pg.surface.Surface = None ) :
         self.path = pathlib.PurePath(path)
         self.name = self.path.name
-        print(self.path,self.name)
 
         self.max_size = None
         if path is not None and surface is None:
@@ -23,8 +22,7 @@ class Asset :
             self.sprite = Sprite(surface=surface)
 
         self.max_size: Pos = None
-        self.width = None
-        self.height = None
+
 
         self.should_render_debug = True
         self.background_color = c.BLACK.copy().set_alpha(int(0.35 * 255))
@@ -34,10 +32,13 @@ class Asset :
         self.padding_top = 10
         self.padding_bottom = 10
 
+        self.rect = Rect(0,0,0,0)
+
 
     def set_max_size( self, max_size: Pos ) :
         self.max_size = max_size
         self.sprite.max_size = self.max_size.copy()
+        self.rect = Rect.fromPos(Pos(0,0),self.get_padded_size())
         return self
 
     def set_padding(self,padding_left:int=0,padding_right:int=0,
@@ -81,7 +82,7 @@ class Asset :
     def render_debug( self, surface: pg.surface.Surface, top_left: Pos = None, center: Pos = None ) :
         if top_left is not None : blit_point = top_left
         elif center is not None : blit_point = center
-        else : raise ValueError("BadInput")
+        else : blit_point = self.rect.get_pos().copy()
 
         sprite_rect = Rect.fromPos(
             Pos(blit_point.x + self.padding_left, blit_point.y + self.padding_top), self.get_size())
@@ -93,7 +94,7 @@ class Asset :
     def render( self, surface: pg.surface.Surface, top_left: Pos = None, center: Pos = None ) :
         if top_left is not None : blit_point = top_left
         elif center is not None : blit_point = center
-        else : raise ValueError("BadInput")
+        else : blit_point = self.rect.get_pos().copy()
 
         sprite_rect = Rect.fromPos(
             Pos(blit_point.x + self.padding_left, blit_point.y + self.padding_top), self.get_size())

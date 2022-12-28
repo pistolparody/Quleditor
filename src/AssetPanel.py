@@ -19,11 +19,11 @@ class AssetPanel :
         self.asset_padding_top = 10
         self.asset_padding_bottom = 10
 
-        self.padded_size = self.asset_max_size.copy().join(
-            Pos(self.asset_padding_left+self.asset_padding_right,
-                self.asset_padding_bottom+self.asset_padding_top)
-        )
+        self.mouse_pos = Pos(0, 0)
 
+        self.padded_size = self.asset_max_size.copy().join(
+            Pos(self.asset_padding_left + self.asset_padding_right,
+                self.asset_padding_bottom + self.asset_padding_top))
 
 
     def update_assets( self, asset_list: list[Asset] ) :
@@ -35,12 +35,11 @@ class AssetPanel :
     def update_surface( self ) :
         max_height = self.padded_size.y
         blit_point = Pos(0, 0)
-        for _ in self.assets:
+        for _ in self.assets :
             if blit_point.x + self.padded_size.x > self.surface_rect.width :
                 blit_point.reset(0, blit_point.y + self.padded_size.y)
 
             blit_point.x += self.padded_size.x
-
 
         self.surface_rect.height = max_height + blit_point.y
 
@@ -52,23 +51,28 @@ class AssetPanel :
             i.should_render_debug = True
             i.set_max_size(self.asset_max_size.copy())
             i.set_padding(self.asset_padding_left, self.asset_padding_right,
-                            self.asset_padding_bottom, self.asset_padding_top)
+                self.asset_padding_bottom, self.asset_padding_top)
             i.transform_sprite()
             padded_size = i.get_padded_size()
 
             if blit_point.x + padded_size.x > self.surface_rect.width :
                 blit_point.reset(0, blit_point.y + padded_size.y)
 
-            i.render(self.surface, blit_point)
+            i.rect.reset_pos(blit_point.x,blit_point.y)
+
+            i.render(self.surface)
             blit_point.x += padded_size.x
 
 
-    def get_events( self ) :
-        pass
+    def get_events( self, mouse_pos: Pos = None ) :
+        if mouse_pos is not None: self.mouse_pos.reset(mouse_pos.x,mouse_pos.y)
 
 
     def check_events( self ) :
-        pass
+        if self.surface_rect.collidepoint(self.mouse_pos):
+            for i in self.assets:
+                if i.rect.collidepoint(self.mouse_pos):
+                    print(i.name)
 
 
     def render( self, surface: pg.surface.Surface ) :
