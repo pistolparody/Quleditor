@@ -1,14 +1,21 @@
 import pygame as pg
 
+import random
 from . import Enumerator
 
 
 class Color(pg.color.Color):
 
+    @staticmethod
+    def randomColor():
+        return Color(container=[random.randint(0,255) for _ in range(3)])
 
-    def __init__(self,r:int=0,g:int=0,b:int=0,a:int=255,text:str=None):
+    def __init__(self,r:int=0,g:int=0,b:int=0,a:int=255,text:str=None,container:list[int]=None):
+        if container is not None: super().__init__(container) ;return
         if text is not None: super().__init__(text) ;return
         super().__init__(r,g,b,a)
+
+
 
     def get_tuple( self ) :
         return self.r, self.g, self.b, self.a

@@ -37,7 +37,9 @@ class ScrollView :
         self.surface.fill(self.background_color)
         blit_point = Pos(0, 0).join(self.scroll_rel)
         rendered_content_height = 0
+
         for i in self.content_list :
+
             if blit_point.y + i.get_height() <= self.rect.height:
                 self.surface.blit(i, blit_point)
                 rendered_content_height += i.get_height()

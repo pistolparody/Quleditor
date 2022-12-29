@@ -22,17 +22,19 @@ class AssetManager :
         self.should_render_debug = False
 
         self.mouse_pos = Pos(0, 0)
+        self.asset_max_size = Pos(50, 50)
+
+        self.asset_group_list: list[AssetGroup] = []
+        self.asset_group_limit = 10
 
         self.pressed_mouse_keys = []
         self.held_mouse_keys = []
 
         target_folder = '/home/yolo/Workstation/Assets/Small Forest Asset Pack/All/'
-        self.last_dropped_files = [target_folder + "/" + i for i in os.listdir(target_folder)]
+        self.last_dropped_files = []
 
         self.scroll_view = ScrollView(Rect(0, 0, screen_size.x * 0.7, screen_size.y))
 
-        self.asset_group = AssetGroup(Rect(0, 0, screen_size.x * 0.7, screen_size.y))
-        self.asset_group.update_surface()
         self.load_assets()
 
 
@@ -41,17 +43,31 @@ class AssetManager :
         self.pressed_mouse_keys = pressed_mouse_keys
         self.held_mouse_keys = held_mouse_keys
 
-        self.asset_group.set_mouse_data(
-            mouse_pos.copy().join(self.scroll_view.scroll_rel.get_flipped()), pressed_mouse_keys,
-            held_mouse_keys)
+        for i in self.asset_group_list:
+            m_pos = self.mouse_pos.copy().join(self.scroll_view.scroll_rel.get_flipped())
+            i.set_mouse_data(m_pos, pressed_mouse_keys, held_mouse_keys)
+
+        # if self.asset_group_list.__len__()>1:
+        #     print(self.asset_group_list[0].mouse_pos)
+
+
+    def receive_dropped_files( self, dropped_files: list[str] ) :
+        group_count = len(dropped_files) // self.asset_group_limit + 1
+        self.last_dropped_files.clear()
+        for i in range(group_count) :
+            group_files = dropped_files[
+            i * self.asset_group_limit :(i + 1) * self.asset_group_limit]
+            self.last_dropped_files.append(group_files)
+
+        self.load_assets()
 
 
     def get_events( self, event_list: list = None ) :
         if event_list is None : event_list = []
 
-        self.asset_group.get_events(event_list=event_list)
+        # self.asset_group.get_events(event_list=event_list)
 
-        if len(self.pressed_mouse_keys): self.scroll_view.scroll_request.reset()
+        if len(self.pressed_mouse_keys) : self.scroll_view.scroll_request.reset()
 
         for i in event_list :
             if i.type == MOUSEWHEEL :
@@ -60,27 +76,31 @@ class AssetManager :
 
 
     def load_assets( self ) :
-        assets = [Asset(surface=i[0], path=i[1]) for i in
-            [(safe_image_load(i), i) for i in self.last_dropped_files] if i[0] is not None]
 
-        self.asset_group.update_assets(assets)
 
-        self.scroll_view.content_list = [self.asset_group.surface]
+        self.asset_group_list.clear()
+
+        for i in self.last_dropped_files :
+            temp = [Asset(path=j) for j in i]
+            for j in temp : j.set_max_size(self.asset_max_size)
+            color = Color.randomColor().lerp(c.BLACK, 0.7)
+            self.asset_group_list.append(
+                AssetGroup(Rect.fromPos(Pos(0, 0), self.scroll_view.rect.get_size())))
+            self.asset_group_list[-1].background_color = color
+            self.asset_group_list[-1].update_assets(temp)
+
+        self.scroll_view.content_list = [i.surface for i in self.asset_group_list]
+
         self.scroll_view.update_surface(True)
 
 
     def check_events( self ) :
-        if len(self.last_dropped_files) :
-            self.load_assets()
-            self.last_dropped_files.clear()
+        for i in self.asset_group_list :
+            i.check_events()
 
-        if self.scroll_view.scroll_request.is_origin():
-            self.asset_group.check_events()
 
-        if self.asset_group.was_updated:
-            self.scroll_view.content_list = [self.asset_group.surface]
-            self.scroll_view.update_surface(False)
-
+        self.scroll_view.content_list = [i.surface for i in self.asset_group_list]
+        self.scroll_view.update_surface(False)
         self.scroll_view.check_events()
 
 
@@ -95,6 +115,7 @@ class AssetManager :
     def render( self, surface: pg.surface.Surface ) :
         surface.fill(self.background_color)
         # self.asset_panel.render(surface)
+
 
         self.scroll_view.render(surface)
 

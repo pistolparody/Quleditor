@@ -19,7 +19,7 @@ editor = Editor(window.get_window_size())
 frames = 0
 l_time = time.time()
 check_fps = 1
-# check_fps = True
+
 
 while window.is_running:
     events = pg.event.get()
@@ -27,7 +27,7 @@ while window.is_running:
     editor.get_events(events)
 
     window.check_events()
-    editor.get_grabbed_files(window.grab_dropped_files())
+    editor.receive_grabbed_files(window.grab_dropped_files())
     editor.check_events()
 
     editor.render(window.get_window())

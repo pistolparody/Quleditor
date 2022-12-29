@@ -19,8 +19,9 @@ class Editor :
         self.mouse_pos = Pos(0, 0)
 
 
-    def get_grabbed_files( self, grabbed_files: list ) :
-        self.asset_manager.last_dropped_files = grabbed_files
+    def receive_grabbed_files( self, grabbed_files: list ) :
+        if len(grabbed_files):
+            self.asset_manager.receive_dropped_files(grabbed_files)
 
 
     def get_events( self, event_list: list ) :
