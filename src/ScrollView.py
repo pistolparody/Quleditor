@@ -14,7 +14,7 @@ class ScrollView :
         self.scroll_rel = Pos(0,0)
         self.scroll_request = Pos(0,0)
         self.scroll_timer = 0
-        self.scroll_interval = 0.3
+        self.scroll_interval = 2
 
 
         self.rect = surface_rect
@@ -58,7 +58,6 @@ class ScrollView :
 
     def check_events( self ) :
         if self.scroll_request.y!=0:
-            print(self.rect,self.scroll_rel,self.content_height)
             self.scroll_rel.y += self.scroll_request.y
             if self.scroll_rel.y > self.rect.y:
                 self.scroll_rel.y = 0

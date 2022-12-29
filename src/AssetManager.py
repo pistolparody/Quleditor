@@ -23,6 +23,9 @@ class AssetManager :
 
         self.mouse_pos = Pos(0, 0)
 
+        self.pressed_mouse_keys = []
+        self.held_mouse_keys =[]
+
         target_folder = '/home/yolo/Workstation/Assets/Small Forest Asset Pack/All/'
         self.last_dropped_files = [target_folder + "/" + i for i in os.listdir(target_folder)]
 
@@ -33,22 +36,29 @@ class AssetManager :
         self.load_assets()
 
 
-    def get_events( self, event_list: list = None, mouse_pos: Pos = None ) :
+    def set_mouse_data( self , mouse_pos:Pos,pressed_mouse_keys:list,held_mouse_keys:list):
+        self.mouse_pos = mouse_pos
+        self.pressed_mouse_keys = pressed_mouse_keys
+        self.held_mouse_keys = held_mouse_keys
+
+        self.asset_panel.set_mouse_data(mouse_pos, pressed_mouse_keys, held_mouse_keys)
+
+    def get_events( self, event_list: list = None ) :
         if event_list is None : event_list = []
-        if mouse_pos is not None : self.mouse_pos.reset(mouse_pos.x, mouse_pos.y)
+
 
         m_pos = self.mouse_pos.copy().join(
             self.scroll_view.scroll_rel.get_transformed_pos(mult=-1)
         )
 
-        self.asset_panel.get_events(event_list=event_list, mouse_pos=m_pos)
+        self.asset_panel.get_events(event_list=event_list)
 
 
         for i in event_list :
             if i.type == MOUSEWHEEL :
                 self.scroll_view.scroll_request.y = i.y
                 self.scroll_view.scroll_timer = time.time()
-            pass
+
 
 
     def load_assets( self ) :
