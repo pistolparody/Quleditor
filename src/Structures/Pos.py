@@ -51,6 +51,10 @@ class Pos(Vector2) :
     def get_flipped( self ):
         return self.copy().flip()
 
+    # determines if both x and y are 0
+    def is_origin( self ) -> bool:
+        return self.x == 0 and self.y == 0
+
     def transform( self, Sum: float = 0, mult: float = 1, sum_first: bool = False ) :
         if not sum_first :
             self.x *= mult
