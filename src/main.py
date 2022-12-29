@@ -18,7 +18,7 @@ editor = Editor(window.get_window_size())
 
 frames = 0
 l_time = time.time()
-check_fps = False
+check_fps = 1
 # check_fps = True
 
 while window.is_running:
@@ -37,7 +37,7 @@ while window.is_running:
         frames += 1
         if frames % 60 == 0:
             t = time.time() - l_time
-            print("approximate fps:",round(60 / t))
+            print("approximate fps:",round(60 / t),"time",round(t,2))
             l_time = time.time()
 
 

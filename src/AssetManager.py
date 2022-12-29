@@ -31,8 +31,8 @@ class AssetManager :
 
         self.scroll_view = ScrollView(Rect(0, 0, screen_size.x * 0.7, screen_size.y))
 
-        self.asset_panel = AssetGroup(Rect(0, 0, screen_size.x * 0.7, screen_size.y))
-        self.asset_panel.update_surface()
+        self.asset_group = AssetGroup(Rect(0, 0, screen_size.x * 0.7, screen_size.y))
+        self.asset_group.update_surface()
         self.load_assets()
 
 
@@ -41,7 +41,7 @@ class AssetManager :
         self.pressed_mouse_keys = pressed_mouse_keys
         self.held_mouse_keys = held_mouse_keys
 
-        self.asset_panel.set_mouse_data(
+        self.asset_group.set_mouse_data(
             mouse_pos.copy().join(self.scroll_view.scroll_rel.get_flipped()), pressed_mouse_keys,
             held_mouse_keys)
 
@@ -49,9 +49,7 @@ class AssetManager :
     def get_events( self, event_list: list = None ) :
         if event_list is None : event_list = []
 
-        m_pos = self.mouse_pos.copy().join(self.scroll_view.scroll_rel.get_transformed_pos(mult=-1))
-
-        self.asset_panel.get_events(event_list=event_list)
+        self.asset_group.get_events(event_list=event_list)
 
         for i in event_list :
             if i.type == MOUSEWHEEL :
@@ -63,9 +61,9 @@ class AssetManager :
         assets = [Asset(surface=i[0], path=i[1]) for i in
             [(safe_image_load(i), i) for i in self.last_dropped_files] if i[0] is not None]
 
-        self.asset_panel.update_assets(assets)
+        self.asset_group.update_assets(assets)
 
-        self.scroll_view.content_list = [self.asset_panel.surface]
+        self.scroll_view.content_list = [self.asset_group.surface]
         self.scroll_view.update_surface(True)
 
 
@@ -74,10 +72,11 @@ class AssetManager :
             self.load_assets()
             self.last_dropped_files.clear()
 
-        self.asset_panel.check_events()
+        if self.scroll_view.scroll_request.is_origin():
+            self.asset_group.check_events()
 
-        if self.asset_panel.was_updated :
-            self.scroll_view.content_list = [self.asset_panel.surface]
+        if self.asset_group.was_updated:
+            self.scroll_view.content_list = [self.asset_group.surface]
             self.scroll_view.update_surface(False)
 
         self.scroll_view.check_events()
