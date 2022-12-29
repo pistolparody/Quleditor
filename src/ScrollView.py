@@ -14,7 +14,7 @@ class ScrollView :
         self.scroll_rel = Pos(0,0)
         self.scroll_request = Pos(0,0)
         self.scroll_timer = 0
-        self.scroll_interval = 2
+        self.scroll_interval = 1
 
 
         self.rect = surface_rect

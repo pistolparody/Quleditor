@@ -51,6 +51,8 @@ class AssetManager :
 
         self.asset_group.get_events(event_list=event_list)
 
+        if len(self.pressed_mouse_keys): self.scroll_view.scroll_request.reset()
+
         for i in event_list :
             if i.type == MOUSEWHEEL :
                 self.scroll_view.scroll_request.y = i.y
