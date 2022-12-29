@@ -43,9 +43,12 @@ class AssetManager :
         self.pressed_mouse_keys = pressed_mouse_keys
         self.held_mouse_keys = held_mouse_keys
 
+        counter = 0
         for i in self.asset_group_list:
             m_pos = self.mouse_pos.copy().join(self.scroll_view.scroll_rel.get_flipped())
+            m_pos.y -= self.scroll_view.get_content_height(counter)
             i.set_mouse_data(m_pos, pressed_mouse_keys, held_mouse_keys)
+            counter+=1
 
         # if self.asset_group_list.__len__()>1:
         #     print(self.asset_group_list[0].mouse_pos)
@@ -95,12 +98,15 @@ class AssetManager :
 
 
     def check_events( self ) :
-        for i in self.asset_group_list :
-            i.check_events()
 
 
-        self.scroll_view.content_list = [i.surface for i in self.asset_group_list]
-        self.scroll_view.update_surface(False)
+        if self.scroll_view.scroll_request.is_origin():
+            for i in self.asset_group_list :
+                i.check_events()
+
+            self.scroll_view.content_list = [i.surface for i in self.asset_group_list]
+            self.scroll_view.update_surface(False)
+
         self.scroll_view.check_events()
 
 

@@ -92,8 +92,10 @@ class AssetGroup :
         if self.selected_index is not None and c.MOUSE_LEFT in self.pressed_mouse_keys:
             print(self.name,self.assets[self.selected_index].name)
 
+
         if self.surface_rect.collidepoint(self.mouse_pos) :
             counter = 0
+
             for i in self.assets :
                 i.is_hovering = i.rect.collidepoint(self.mouse_pos)
                 if i.is_hovering:
