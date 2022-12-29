@@ -83,6 +83,7 @@ class AssetManager :
 
         self.asset_group_list.clear()
 
+        counter = 0
         for i in self.last_dropped_files :
             temp = [Asset(path=j) for j in i]
             for j in temp : j.set_max_size(self.asset_max_size)
@@ -91,6 +92,8 @@ class AssetManager :
                 AssetGroup(Rect.fromPos(Pos(0, 0), self.scroll_view.rect.get_size())))
             self.asset_group_list[-1].background_color = color
             self.asset_group_list[-1].update_assets(temp)
+            self.asset_group_list[-1].name = str(counter)
+            counter += 1
 
         self.scroll_view.content_list = [i.surface for i in self.asset_group_list]
 

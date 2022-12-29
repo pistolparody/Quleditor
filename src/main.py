@@ -8,7 +8,7 @@ from Structures import Constants as c
 from AssetManager import AssetManager
 from Editor import Editor
 
-print("\n")
+
 
 
 pg.init()

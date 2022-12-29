@@ -22,7 +22,7 @@ class AssetGroup :
         self.asset_padding_right = 10
         self.asset_padding_top = 10
         self.asset_padding_bottom = 10
-        self.mouse_pos = Pos(0, 0)
+        self.mouse_pos = Pos(-1, -1)
 
         self.pressed_mouse_keys = []
         self.held_mouse_keys = []
@@ -89,13 +89,13 @@ class AssetGroup :
         hovering_data = []
         self.was_updated = False
 
-        if self.selected_index is not None and c.MOUSE_LEFT in self.pressed_mouse_keys:
-            print(self.name,self.assets[self.selected_index].name)
+
 
 
         if self.surface_rect.collidepoint(self.mouse_pos) :
+            if self.selected_index is not None and c.MOUSE_LEFT in self.pressed_mouse_keys :
+                print(self.name, self.assets[self.selected_index].name, time.time())
             counter = 0
-
             for i in self.assets :
                 i.is_hovering = i.rect.collidepoint(self.mouse_pos)
                 if i.is_hovering:
