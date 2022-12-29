@@ -5,6 +5,7 @@ from Structures.Window import Window
 from Structures.Menu import Menu
 from Structures.Pos import Pos
 from Structures import Constants as c
+from AssetManager import AssetManager
 from Editor import Editor
 
 print("\n")
@@ -12,8 +13,8 @@ print("\n")
 
 pg.init()
 window = Window(Pos(1200,750),Pos(1200,750),"Quleditor",60,c.WINDOW_REAL_SIZE)
-
 editor = Editor(window.get_window_size())
+
 
 frames = 0
 l_time = time.time()
@@ -23,11 +24,10 @@ check_fps = False
 while window.is_running:
     events = pg.event.get()
     window.get_events(events)
-    editor.get_events(event_list=events,mouse_pos=window.get_mouse_pos())
-
-    editor.last_dropped_files = window.grab_dropped_files()
+    editor.get_events(events)
 
     window.check_events()
+    editor.get_grabbed_files(window.grab_dropped_files())
     editor.check_events()
 
     editor.render(window.get_window())

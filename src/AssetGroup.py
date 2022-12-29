@@ -9,7 +9,7 @@ from Structures.Pos import Pos
 from Structures import Constants as c
 from Structures.Enumerator import Enumerator
 
-class AssetPanel :
+class AssetGroup :
 
     def __init__( self, surface_rect: Rect ) :
         self.surface_rect = surface_rect
