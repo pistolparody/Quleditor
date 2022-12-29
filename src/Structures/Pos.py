@@ -43,6 +43,13 @@ class Pos(Vector2) :
     def get_mult_transform( self ) :
         return self.copy().mult_transform()
 
+    def flip( self ):
+        self.x *= -1
+        self.y *= -1
+        return self
+
+    def get_flipped( self ):
+        return self.copy().flip()
 
     def transform( self, Sum: float = 0, mult: float = 1, sum_first: bool = False ) :
         if not sum_first :

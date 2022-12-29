@@ -24,7 +24,7 @@ class AssetManager :
         self.mouse_pos = Pos(0, 0)
 
         self.pressed_mouse_keys = []
-        self.held_mouse_keys =[]
+        self.held_mouse_keys = []
 
         target_folder = '/home/yolo/Workstation/Assets/Small Forest Asset Pack/All/'
         self.last_dropped_files = [target_folder + "/" + i for i in os.listdir(target_folder)]
@@ -36,23 +36,22 @@ class AssetManager :
         self.load_assets()
 
 
-    def set_mouse_data( self , mouse_pos:Pos,pressed_mouse_keys:list,held_mouse_keys:list):
+    def set_mouse_data( self, mouse_pos: Pos, pressed_mouse_keys: list, held_mouse_keys: list ) :
         self.mouse_pos = mouse_pos
         self.pressed_mouse_keys = pressed_mouse_keys
         self.held_mouse_keys = held_mouse_keys
 
-        self.asset_panel.set_mouse_data(mouse_pos, pressed_mouse_keys, held_mouse_keys)
+        self.asset_panel.set_mouse_data(
+            mouse_pos.copy().join(self.scroll_view.scroll_rel.get_flipped()), pressed_mouse_keys,
+            held_mouse_keys)
+
 
     def get_events( self, event_list: list = None ) :
         if event_list is None : event_list = []
 
-
-        m_pos = self.mouse_pos.copy().join(
-            self.scroll_view.scroll_rel.get_transformed_pos(mult=-1)
-        )
+        m_pos = self.mouse_pos.copy().join(self.scroll_view.scroll_rel.get_transformed_pos(mult=-1))
 
         self.asset_panel.get_events(event_list=event_list)
-
 
         for i in event_list :
             if i.type == MOUSEWHEEL :
@@ -60,13 +59,11 @@ class AssetManager :
                 self.scroll_view.scroll_timer = time.time()
 
 
-
     def load_assets( self ) :
         assets = [Asset(surface=i[0], path=i[1]) for i in
             [(safe_image_load(i), i) for i in self.last_dropped_files] if i[0] is not None]
 
         self.asset_panel.update_assets(assets)
-
 
         self.scroll_view.content_list = [self.asset_panel.surface]
         self.scroll_view.update_surface(True)
