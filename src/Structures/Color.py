@@ -12,6 +12,14 @@ class Color(pg.color.Color):
     def randomColor():
         return Color(container=[random.randint(0,255) for _ in range(3)])
 
+    @staticmethod
+    def swap_colors(color,other_color):
+        color.r,other_color.r = other_color.r,color.r
+        color.g,other_color.g = other_color.g,color.g
+        color.b,other_color.b = other_color.b,color.b
+        color.a,other_color.a = other_color.a,color.a
+
+
     def __init__(self,r:int=0,g:int=0,b:int=0,a:int=255,text:str=None,container:list[int]=None):
         if container is not None: super().__init__(container) ;return
         if text is not None: super().__init__(text) ;return
@@ -19,6 +27,14 @@ class Color(pg.color.Color):
 
     def lerp_me(self, color, amount: float):
         self.reset(color=self.lerp(color,amount))
+        return self
+
+    def swap_color( self,color ):
+        self.r, color.r = color.r,self.r
+        self.g, color.g = color.g,self.g
+        self.b, color.b = color.b,self.b
+        self.a, color.a = color.a,self.a
+
         return self
 
 

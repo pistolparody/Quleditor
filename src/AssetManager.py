@@ -19,7 +19,6 @@ class AssetManager :
 
     def __init__( self, screen_size: Pos ) :
         self.screen_size: Pos = screen_size  # reference
-        self.background_color = ct.WOODEN
         self.should_render_debug = False
 
         self.mouse_pos = Pos(0, 0)
@@ -31,24 +30,34 @@ class AssetManager :
         self.pressed_mouse_keys = []
         self.held_mouse_keys = []
 
-        target_folder = '/home/yolo/Workstation/Assets/Small Forest Asset Pack/All/'
-        self.last_dropped_files = []
+        target_folder = '/home/yolo/Workstation/Assets/bunch_of_assets'
 
+        dropped_filed = [f'{target_folder}/{i}' for i in os.listdir(target_folder)]
+        self.last_dropped_files = []
         self.last_active_group = None
         self.last_selected_asset = None
         self.last_selected_asset_index = None
 
-        self.asset_group_bgc = ct.P1_MINT.copy().lerp(Color.randomColor(), 0.0)
+        self.is_dark_theme = True
+        self.dark_theme_shade_scale = 0.8
 
-        self.asset_bgc = ct.P1_PEACH
-        self.asset_hover_bgc = ct.P1_YELLOW
+        self.background_color = ct.P1_PEACH.copy()
+        self.asset_group_bgc = ct.P1_MINT.lerp(Color.randomColor(), 0.3)
+        self.asset_bgc = ct.P1_PEACH.copy()
+        self.asset_hover_bgc = ct.P1_YELLOW.copy()
+        self.selected_asset_bgc = self.asset_hover_bgc.lerp(ct.P1_PEACH, 0.5)
 
-        self.selected_asset_bgc = self.asset_hover_bgc.copy().lerp(ct.P1_PEACH,0.5)
+        self.light_theme_colors: list[Color] = [self.background_color, self.asset_group_bgc,
+            self.asset_bgc, self.asset_hover_bgc, self.selected_asset_bgc]
 
 
+        self.dark_theme_colors = [i.lerp(ct.BLACK, self.dark_theme_shade_scale) for i in
+            self.light_theme_colors]
 
         self.scroll_view = ScrollView(Rect(0, 0, screen_size.x * 0.7, screen_size.y))
         self.scroll_view.background_color = ct.GRAY
+        self.receive_dropped_files(dropped_filed)
+
         self.load_assets()
 
 
@@ -64,7 +73,22 @@ class AssetManager :
             i.set_mouse_data(m_pos, pressed_mouse_keys, held_mouse_keys)
             counter += 1
 
-        # if self.asset_group_list.__len__()>1:  #     print(self.asset_group_list[0].mouse_pos)
+
+
+
+    def toggle_dark_theme( self ) :
+        self.is_dark_theme = not self.is_dark_theme
+        for dark, light in zip(self.dark_theme_colors, self.light_theme_colors) :
+            dark.swap_color(light)
+
+        for i in self.asset_group_list :
+            i.set_color_data(self.asset_group_bgc, self.asset_bgc, self.asset_hover_bgc,
+                self.selected_asset_bgc)
+            i.update_surface()
+
+        self.scroll_view.content_list = [i.surface for i in self.asset_group_list]
+
+        self.scroll_view.update_surface(False)
 
 
     def receive_dropped_files( self, dropped_files: list[str] ) :
@@ -107,7 +131,7 @@ class AssetManager :
             self.asset_group_list[-1].background_color = color
             self.asset_group_list[-1].name = str(counter)
             self.asset_group_list[-1].set_color_data(self.asset_group_bgc, self.asset_bgc,
-                self.asset_hover_bgc,self.selected_asset_bgc)
+                self.asset_hover_bgc, self.selected_asset_bgc)
 
             self.asset_group_list[-1].update_assets(temp)
             self.asset_group_list[-1].update_surface()
@@ -121,28 +145,27 @@ class AssetManager :
 
     def check_events( self ) :
         if self.scroll_view.scroll_request.is_origin() :
-
             should_unselect = False
             counter = 0
             exception = 0
             for i in self.asset_group_list :
                 i.check_events()
-                if i.new_selection:
+                if i.new_selection :
                     should_unselect = True
                     exception = counter
                     i.update_surface()
                 counter += 1
 
-            if should_unselect:
+            if should_unselect :
                 counter = 0
                 for i in self.asset_group_list :
-                    if counter != exception:
+                    if counter != exception :
                         i.unselect()
                         i.update_surface()
                     counter += 1
 
             if any([k.hover_action_updated for k in self.asset_group_list]) or any(
-                [k.new_selection for k in self.asset_group_list]) :
+                    [k.new_selection for k in self.asset_group_list]) :
                 self.scroll_view.content_list = [i.surface for i in self.asset_group_list]
                 self.scroll_view.update_surface(False)
 

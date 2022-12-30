@@ -16,7 +16,7 @@ class Editor :
 
     def __init__( self, screen_size: Pos ) :
         self.asset_manager = AssetManager(screen_size)
-        self.asset_manager.background_color = ct.P1_PEACH
+        # self.asset_manager.background_color = ct.P1_PEACH
 
         self.held_mouse_keys = []
         self.pressed_mouse_keys = []
@@ -36,7 +36,11 @@ class Editor :
         held_mouse_keys = []
         if event_list is not None :
             for i in event_list :
-                if i.type == MOUSEBUTTONDOWN :
+                if i.type == KEYUP:
+                    if i.key == K_F11:
+                        self.asset_manager.toggle_dark_theme()
+
+                elif i.type == MOUSEBUTTONDOWN :
                     for d in zip(c.MOUSE_KEYS.data, mouse_presses) :
                         if d[1] :
                             if d[0] not in held_mouse_keys :

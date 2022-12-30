@@ -96,6 +96,7 @@ class AssetGroup :
 
     def set_color_data( self, bg_color: Color, asset_bg_color: Color, asset_hover_color: Color,
             selection_color: Color ) :
+
         self.background_color = bg_color
         self.asset_background_color = asset_bg_color
         self.asset_background_hover_color = asset_hover_color
