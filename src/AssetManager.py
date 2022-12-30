@@ -34,6 +34,9 @@ class AssetManager :
         target_folder = '/home/yolo/Workstation/Assets/Small Forest Asset Pack/All/'
         self.last_dropped_files = []
 
+        self.last_active_group = 0
+        self.last_selected_item = 0
+
         self.scroll_view = ScrollView(Rect(0, 0, screen_size.x * 0.7, screen_size.y))
         self.scroll_view.background_color = ct.GRAY
         self.load_assets()
@@ -116,8 +119,9 @@ class AssetManager :
             for i in self.asset_group_list :
                 i.check_events()
 
-            self.scroll_view.content_list = [i.surface for i in self.asset_group_list]
-            self.scroll_view.update_surface(False)
+            if any([k.was_updated for k in self.asset_group_list]):
+                self.scroll_view.content_list = [i.surface for i in self.asset_group_list]
+                self.scroll_view.update_surface(False)
 
         self.scroll_view.check_events()
 
