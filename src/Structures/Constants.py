@@ -9,6 +9,8 @@ class ColorTemplate:
     DEEP_DARK_RED = Color(38,12,18)
     DARK_ICE = Color(30,43,120)
 
+    GREEN = Color(45,154,93)
+
     BLACK = Color(0,0,0)
     GRAY = Color(127,127,127)
     WHITE = Color(255,255,255)

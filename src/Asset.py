@@ -29,11 +29,13 @@ class Asset :
 
 
         self.is_hovering = False
+        self.is_selected = False
 
         self.should_render_debug = False
 
         self.background_color = ct.P1_MINT.lerp(ct.BLACK,0.6)
         self.background_hover_color = ct.P1_YELLOW.lerp(ct.BLACK,0.6)
+        self.background_selection_color = ct.DEEP_DARK_RED
 
         self.padding_left = 10
         self.padding_right = 10
@@ -110,6 +112,8 @@ class Asset :
         color = self.background_color
         if self.is_hovering :
             color = self.background_hover_color
+        if self.is_selected:
+            color = self.background_selection_color
 
         pg.draw.rect(surface, color, sprite_rect)
 

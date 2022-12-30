@@ -34,8 +34,15 @@ class AssetManager :
         target_folder = '/home/yolo/Workstation/Assets/Small Forest Asset Pack/All/'
         self.last_dropped_files = []
 
-        self.last_active_group = 0
-        self.last_selected_item = 0
+        self.last_active_group = None
+        self.last_selected_asset = None
+        self.last_selected_asset_index = None
+
+        self.asset_group_bgc = ct.P1_MINT.copy().lerp(Color.randomColor(), 0.25)
+        self.selected_asset_bgc = ct.GREEN
+
+        self.asset_bgc = ct.P1_PEACH
+        self.asset_hover_bgc = ct.P1_YELLOW
 
         self.scroll_view = ScrollView(Rect(0, 0, screen_size.x * 0.7, screen_size.y))
         self.scroll_view.background_color = ct.GRAY
@@ -48,14 +55,13 @@ class AssetManager :
         self.held_mouse_keys = held_mouse_keys
 
         counter = 0
-        for i in self.asset_group_list:
+        for i in self.asset_group_list :
             m_pos = self.mouse_pos.copy().join(self.scroll_view.scroll_rel.get_flipped())
             m_pos.y -= self.scroll_view.get_content_height(counter)
             i.set_mouse_data(m_pos, pressed_mouse_keys, held_mouse_keys)
-            counter+=1
+            counter += 1
 
-        # if self.asset_group_list.__len__()>1:
-        #     print(self.asset_group_list[0].mouse_pos)
+        # if self.asset_group_list.__len__()>1:  #     print(self.asset_group_list[0].mouse_pos)
 
 
     def receive_dropped_files( self, dropped_files: list[str] ) :
@@ -83,8 +89,6 @@ class AssetManager :
 
 
     def load_assets( self ) :
-
-
         self.asset_group_list.clear()
 
         counter = 0
@@ -99,10 +103,9 @@ class AssetManager :
 
             self.asset_group_list[-1].background_color = color
             self.asset_group_list[-1].name = str(counter)
-            self.asset_group_list[-1].set_color_data(
-                ct.P1_MINT.copy().lerp(Color.randomColor(),0.25),
-                ct.P1_PEACH,
-                ct.P1_YELLOW)
+            self.asset_group_list[-1].set_color_data(self.asset_group_bgc, self.asset_bgc,
+                self.asset_hover_bgc)
+
             self.asset_group_list[-1].update_assets(temp)
 
             counter += 1
@@ -113,13 +116,29 @@ class AssetManager :
 
 
     def check_events( self ) :
+        if self.scroll_view.scroll_request.is_origin() :
 
-
-        if self.scroll_view.scroll_request.is_origin():
+            should_unselect = False
+            counter = 0
+            exception = 0
             for i in self.asset_group_list :
                 i.check_events()
+                if i.new_selection:
+                    should_unselect = True
+                    exception = counter
+                    i.update_surface()
+                counter += 1
 
-            if any([k.was_updated for k in self.asset_group_list]):
+            if should_unselect:
+                counter = 0
+                for i in self.asset_group_list :
+                    if counter != exception:
+                        i.unselect()
+                        i.update_surface()
+                    counter += 1
+
+            if any([k.hover_action_updated for k in self.asset_group_list]) or any(
+                [k.new_selection for k in self.asset_group_list]) :
                 self.scroll_view.content_list = [i.surface for i in self.asset_group_list]
                 self.scroll_view.update_surface(False)
 

@@ -22,6 +22,8 @@ class AssetGroup :
 
         self.asset_background_color = ct.GRAY
         self.asset_background_hover_color = ct.P1_YELLOW
+        self.asset_selection_color = ct.GREEN
+
 
         self.asset_max_size = Pos(100, 100)
         self.asset_padding_left = 10
@@ -37,17 +39,23 @@ class AssetGroup :
             Pos(self.asset_padding_left + self.asset_padding_right,
                 self.asset_padding_bottom + self.asset_padding_top))
 
-        self.was_updated = False
+        self.hover_action_updated = False
+        self.new_selection = False
 
         self.last_hovering_data = []
+        self.hovered_index = None
         self.selected_index = None
+        self.selected_asset:Asset = None
 
 
 
     def update_assets( self, asset_list: list[Asset] ) :
         self.assets = asset_list
-
         self.update_surface()
+
+    def unselect( self ):
+        if self.selected_asset is not None:
+            self.selected_asset.is_selected = False
 
 
     def update_surface( self ) :
@@ -68,6 +76,7 @@ class AssetGroup :
         for i in self.assets :
             i.background_color = self.asset_background_color
             i.background_hover_color = self.asset_background_hover_color
+            i.background_selection_color = self.asset_selection_color
 
             i.should_render_debug = True
             i.set_max_size(self.asset_max_size.copy())
@@ -90,6 +99,8 @@ class AssetGroup :
         self.asset_background_color = asset_bg_color
         self.asset_background_hover_color = asset_hover_color
 
+
+
     def set_mouse_data( self , mouse_pos:Pos,pressed_mouse_keys:list,held_mouse_keys:list):
         self.mouse_pos = mouse_pos
         self.pressed_mouse_keys = pressed_mouse_keys
@@ -101,27 +112,32 @@ class AssetGroup :
 
     def check_events( self ) :
         hovering_data = []
-        self.was_updated = False
+        self.hover_action_updated = False
 
-
-
-
+        self.new_selection = False
         if self.surface_rect.collidepoint(self.mouse_pos) :
-            if self.selected_index is not None and c.MOUSE_LEFT in self.pressed_mouse_keys :
-                print(self.name, self.assets[self.selected_index].name, time.time())
             counter = 0
             for i in self.assets :
                 i.is_hovering = i.rect.collidepoint(self.mouse_pos)
                 if i.is_hovering:
-                    self.selected_index = counter
+                    self.hovered_index = counter
                 hovering_data.append(i.is_hovering)
                 counter += 1
 
             if hovering_data != self.last_hovering_data :
                 self.update_surface()
-                self.was_updated = True
+                self.hover_action_updated = True
 
             self.last_hovering_data = hovering_data
+
+            if self.hovered_index is not None and c.MOUSE_LEFT in self.pressed_mouse_keys :
+                if self.selected_asset is not None:
+                    self.selected_asset.is_selected = False
+                self.selected_index = self.hovered_index
+                self.selected_asset = self.assets[self.selected_index]
+                self.new_selection = True
+                self.selected_asset.is_selected = True
+                # print(self.name, self.assets[self.selected_index].name, time.time())
 
         else :
             for i in self.assets :
@@ -130,7 +146,7 @@ class AssetGroup :
             if hovering_data != self.last_hovering_data :
                 self.last_hovering_data = hovering_data
                 self.update_surface()
-                self.was_updated = True
+                self.hover_action_updated = True
 
 
     def render( self, surface: pg.surface.Surface ) :
