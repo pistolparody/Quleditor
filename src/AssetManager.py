@@ -31,8 +31,11 @@ class AssetManager :
         self.held_mouse_keys = []
 
         target_folder = '/home/yolo/Workstation/Assets/bunch_of_assets'
+        dropped_files = []
+        if os.path.exists(target_folder):
+            dropped_files = [f'{target_folder}/{i}' for i in os.listdir(target_folder)]
 
-        dropped_filed = [f'{target_folder}/{i}' for i in os.listdir(target_folder)]
+
         self.last_dropped_files = []
         self.last_active_group = None
         self.last_selected_asset = None
@@ -42,7 +45,7 @@ class AssetManager :
         self.dark_theme_shade_scale = 0.8
 
         self.background_color = ct.P1_PEACH.copy()
-        self.asset_group_bgc = ct.P1_MINT.lerp(Color.randomColor(), 0.3)
+        self.asset_group_bgc = ct.P1_MINT.lerp(Color.randomColor(), 0.0)
         self.asset_bgc = ct.P1_PEACH.copy()
         self.asset_hover_bgc = ct.P1_YELLOW.copy()
         self.selected_asset_bgc = self.asset_hover_bgc.lerp(ct.P1_PEACH, 0.5)
@@ -56,7 +59,7 @@ class AssetManager :
 
         self.scroll_view = ScrollView(Rect(0, 0, screen_size.x * 0.7, screen_size.y))
         self.scroll_view.background_color = ct.GRAY
-        self.receive_dropped_files(dropped_filed)
+        self.receive_dropped_files(dropped_files)
 
         self.load_assets()
 
