@@ -1,5 +1,7 @@
 import pygame as pg
 
+from typing import Union,Literal
+
 import random
 from . import Enumerator
 
@@ -16,14 +18,17 @@ class Color(pg.color.Color):
         super().__init__(r,g,b,a)
 
 
-    def swap_max( self ,swap_target:str ):
+    def swap_max( self ,
+            swap_target: Literal['r','g','b']):
+        """ swap the bits that are not max """
         if swap_target not in 'rgb': raise ValueError("BadInput")
 
         Max = 'r'
         container = [self.r,self.g,self.b]
-        for i in zip('rgb',container):
-            if i[1] == max(container):
-                Max = i[0] ;break
+        for name, value in zip('rgb',container):
+            if name == max(container):
+                Max = value
+                break
 
         med = getattr(self,Max)
         setattr(self,Max,getattr(self,swap_target))
@@ -31,16 +36,16 @@ class Color(pg.color.Color):
 
         return self
 
-    def flip( self, center:str ):
+
+    def flip( self, center: str ) :
+        """ swap the bits that are not center """
         if center not in 'rgb': raise ValueError("BadInput")
-        values = list('rgb')
-        values.remove(center)
 
-        med = getattr(self, values[0])
-        setattr(self, values[0], getattr(self, values[1]))
-        setattr(self, values[1], med)
+        (a, b), d = set('rgb') - {center}, self.__dict__
+        d[a], d[b] = d[b], d[a]
 
-        return self
+
+
 
     def get_tuple( self ) :
         return self.r, self.g, self.b, self.a

@@ -1,5 +1,5 @@
 import pygame as pg
-
+from typing import Union,Literal
 import time
 from Structures.Window import Window
 from Structures.Menu import Menu
@@ -7,7 +7,10 @@ from Structures.Pos import Pos
 from Structures import Constants as c
 from AssetManager import AssetManager
 from Editor import Editor
+from Structures.Color import Color
 
+
+color = Color(0,0,0).swap_max('r')
 
 
 
@@ -18,7 +21,7 @@ editor = Editor(window.get_window_size())
 
 frames = 0
 l_time = time.time()
-check_fps = 1
+check_fps = 0
 
 
 while window.is_running:

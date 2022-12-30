@@ -38,11 +38,14 @@ class AssetManager :
         self.last_selected_asset = None
         self.last_selected_asset_index = None
 
-        self.asset_group_bgc = ct.P1_MINT.copy().lerp(Color.randomColor(), 0.25)
-        self.selected_asset_bgc = ct.GREEN
+        self.asset_group_bgc = ct.P1_MINT.copy().lerp(Color.randomColor(), 0.0)
 
         self.asset_bgc = ct.P1_PEACH
         self.asset_hover_bgc = ct.P1_YELLOW
+
+        self.selected_asset_bgc = self.asset_bgc.copy().swap_max('g')
+
+
 
         self.scroll_view = ScrollView(Rect(0, 0, screen_size.x * 0.7, screen_size.y))
         self.scroll_view.background_color = ct.GRAY
@@ -104,9 +107,10 @@ class AssetManager :
             self.asset_group_list[-1].background_color = color
             self.asset_group_list[-1].name = str(counter)
             self.asset_group_list[-1].set_color_data(self.asset_group_bgc, self.asset_bgc,
-                self.asset_hover_bgc)
+                self.asset_hover_bgc,self.selected_asset_bgc)
 
             self.asset_group_list[-1].update_assets(temp)
+            self.asset_group_list[-1].update_surface()
 
             counter += 1
 

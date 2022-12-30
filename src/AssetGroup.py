@@ -11,6 +11,7 @@ from Structures.Constants import ColorTemplate as ct
 
 from Structures.Enumerator import Enumerator
 
+
 class AssetGroup :
 
     def __init__( self, surface_rect: Rect ) :
@@ -22,8 +23,7 @@ class AssetGroup :
 
         self.asset_background_color = ct.GRAY
         self.asset_background_hover_color = ct.P1_YELLOW
-        self.asset_selection_color = ct.GREEN
-
+        self.asset_selection_color = ct.WOODEN
 
         self.asset_max_size = Pos(100, 100)
         self.asset_padding_left = 10
@@ -45,16 +45,16 @@ class AssetGroup :
         self.last_hovering_data = []
         self.hovered_index = None
         self.selected_index = None
-        self.selected_asset:Asset = None
-
+        self.selected_asset: Asset = None
 
 
     def update_assets( self, asset_list: list[Asset] ) :
         self.assets = asset_list
         self.update_surface()
 
-    def unselect( self ):
-        if self.selected_asset is not None:
+
+    def unselect( self ) :
+        if self.selected_asset is not None :
             self.selected_asset.is_selected = False
 
 
@@ -94,19 +94,20 @@ class AssetGroup :
             blit_point.x += padded_size.x
 
 
-    def set_color_data( self , bg_color:Color,asset_bg_color:Color,asset_hover_color:Color ):
+    def set_color_data( self, bg_color: Color, asset_bg_color: Color, asset_hover_color: Color,
+            selection_color: Color ) :
         self.background_color = bg_color
         self.asset_background_color = asset_bg_color
         self.asset_background_hover_color = asset_hover_color
+        self.asset_selection_color = selection_color
 
-
-
-    def set_mouse_data( self , mouse_pos:Pos,pressed_mouse_keys:list,held_mouse_keys:list):
+    def set_mouse_data( self, mouse_pos: Pos, pressed_mouse_keys: list, held_mouse_keys: list ) :
         self.mouse_pos = mouse_pos
         self.pressed_mouse_keys = pressed_mouse_keys
         self.held_mouse_keys = held_mouse_keys
 
-    def get_events( self, event_list: list = None) :
+
+    def get_events( self, event_list: list = None ) :
         pass
 
 
@@ -119,7 +120,7 @@ class AssetGroup :
             counter = 0
             for i in self.assets :
                 i.is_hovering = i.rect.collidepoint(self.mouse_pos)
-                if i.is_hovering:
+                if i.is_hovering :
                     self.hovered_index = counter
                 hovering_data.append(i.is_hovering)
                 counter += 1
@@ -131,13 +132,12 @@ class AssetGroup :
             self.last_hovering_data = hovering_data
 
             if self.hovered_index is not None and c.MOUSE_LEFT in self.pressed_mouse_keys :
-                if self.selected_asset is not None:
+                if self.selected_asset is not None :
                     self.selected_asset.is_selected = False
                 self.selected_index = self.hovered_index
                 self.selected_asset = self.assets[self.selected_index]
                 self.new_selection = True
-                self.selected_asset.is_selected = True
-                # print(self.name, self.assets[self.selected_index].name, time.time())
+                self.selected_asset.is_selected = True  # print(self.name, self.assets[self.selected_index].name, time.time())
 
         else :
             for i in self.assets :
