@@ -17,6 +17,10 @@ class Color(pg.color.Color):
         if text is not None: super().__init__(text) ;return
         super().__init__(r,g,b,a)
 
+    def lerp_me(self, color, amount: float):
+        self.reset(color=self.lerp(color,amount))
+        return self
+
 
     def swap_max( self ,
             swap_target: Literal['r','g','b']):
@@ -47,6 +51,9 @@ class Color(pg.color.Color):
         else :
             raise ValueError("BadInput")
 
+
+    # Max = max('rgb', key=lambda x : getattr(self, x))
+
     # def flip( self, center: str ) :
     #     """ swap the bits that are not center """
     #     if center not in 'rgb': raise ValueError("BadInput")
@@ -65,7 +72,11 @@ class Color(pg.color.Color):
         return Color( self.r, self.g, self.b, self.a )
 
 
-    def reset( self, r: int, g: int, b: int, a: int ) :
+    def reset( self, r: int=0, g: int=0, b: int=0, a: int=255,color=None ) :
+        if color is not None:
+            self.r,self.g,self.b,self.a = color.r,color.g,color.b,color.a
+            return self
+
         self.r, self.g, self.b, self.a = r, g, b, a
         return self
 
