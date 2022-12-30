@@ -7,6 +7,8 @@ from Structures.Menu import Menu
 from Structures.Enumerator import Enumerator
 from Structures.Pos import Pos
 from Structures import Constants as c
+from Structures.Color import Color
+from Structures.Constants import ColorTemplate as ct
 from AssetManager import AssetManager
 
 
@@ -14,6 +16,8 @@ class Editor :
 
     def __init__( self, screen_size: Pos ) :
         self.asset_manager = AssetManager(screen_size)
+        self.asset_manager.background_color = ct.P1_PEACH
+
         self.held_mouse_keys = []
         self.pressed_mouse_keys = []
         self.mouse_pos = Pos(0, 0)

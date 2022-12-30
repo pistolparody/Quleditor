@@ -6,6 +6,7 @@ import time
 
 from Structures.Pos import Pos
 from Structures import Constants as c
+from Structures.Constants import ColorTemplate as ct
 from Structures.Rect import Rect
 from Structures.Color import Color
 from Structures.Functions import safe_image_load
@@ -18,7 +19,7 @@ class AssetManager :
 
     def __init__( self, screen_size: Pos ) :
         self.screen_size: Pos = screen_size  # reference
-        self.background_color = c.WOODEN
+        self.background_color = ct.WOODEN
         self.should_render_debug = False
 
         self.mouse_pos = Pos(0, 0)
@@ -34,7 +35,7 @@ class AssetManager :
         self.last_dropped_files = []
 
         self.scroll_view = ScrollView(Rect(0, 0, screen_size.x * 0.7, screen_size.y))
-
+        self.scroll_view.background_color = ct.GRAY
         self.load_assets()
 
 
@@ -86,13 +87,21 @@ class AssetManager :
         counter = 0
         for i in self.last_dropped_files :
             temp = [Asset(path=j) for j in i]
-            for j in temp : j.set_max_size(self.asset_max_size)
-            color = Color.randomColor().lerp(c.BLACK, 0.7)
+            for j in temp :
+                j.set_max_size(self.asset_max_size)
+
+            color = Color.randomColor().lerp(ct.BLACK, 0.7)
             self.asset_group_list.append(
                 AssetGroup(Rect.fromPos(Pos(0, 0), self.scroll_view.rect.get_size())))
+
             self.asset_group_list[-1].background_color = color
-            self.asset_group_list[-1].update_assets(temp)
             self.asset_group_list[-1].name = str(counter)
+            self.asset_group_list[-1].set_color_data(
+                ct.P1_MINT.copy().lerp(Color.randomColor(),0.25),
+                ct.P1_PEACH,
+                ct.P1_YELLOW)
+            self.asset_group_list[-1].update_assets(temp)
+
             counter += 1
 
         self.scroll_view.content_list = [i.surface for i in self.asset_group_list]
@@ -114,10 +123,10 @@ class AssetManager :
 
 
     def render_debug( self, surface: pg.surface.Surface ) :
-        pg.draw.line(surface, c.WHITE, [self.screen_size.x / 2, 0],
+        pg.draw.line(surface, ct.WHITE, [self.screen_size.x / 2, 0],
             [self.screen_size.x / 2, self.screen_size.y])
 
-        pg.draw.line(surface, c.WHITE, [self.screen_size.x, self.screen_size.y / 2],
+        pg.draw.line(surface, ct.WHITE, [self.screen_size.x, self.screen_size.y / 2],
             [0, self.screen_size.y / 2])
 
 

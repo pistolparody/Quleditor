@@ -7,6 +7,8 @@ from Asset import Asset
 from Structures.Rect import Rect
 from Structures.Pos import Pos
 from Structures import Constants as c
+from Structures.Constants import ColorTemplate as ct
+
 from Structures.Enumerator import Enumerator
 
 class AssetGroup :
@@ -16,7 +18,11 @@ class AssetGroup :
         self.surface_rect = surface_rect
         self.assets: list[Asset] = []
         self.surface = pg.surface.Surface(surface_rect.get_size()).convert_alpha()
-        self.background_color = c.DARK_BLUE.copy().set_alpha(int(0.5 * 255))
+        self.background_color = ct.DARK_BLUE.copy().set_alpha(int(0.5 * 255))
+
+        self.asset_background_color = ct.GRAY
+        self.asset_background_hover_color = ct.P1_YELLOW
+
         self.asset_max_size = Pos(100, 100)
         self.asset_padding_left = 10
         self.asset_padding_right = 10
@@ -60,6 +66,9 @@ class AssetGroup :
         self.surface.fill(self.background_color)
         blit_point = Pos(0, 0)
         for i in self.assets :
+            i.background_color = self.asset_background_color
+            i.background_hover_color = self.asset_background_hover_color
+
             i.should_render_debug = True
             i.set_max_size(self.asset_max_size.copy())
             i.set_padding(self.asset_padding_left, self.asset_padding_right,
@@ -75,6 +84,11 @@ class AssetGroup :
             i.render(self.surface)
             blit_point.x += padded_size.x
 
+
+    def set_color_data( self , bg_color:Color,asset_bg_color:Color,asset_hover_color:Color ):
+        self.background_color = bg_color
+        self.asset_background_color = asset_bg_color
+        self.asset_background_hover_color = asset_hover_color
 
     def set_mouse_data( self , mouse_pos:Pos,pressed_mouse_keys:list,held_mouse_keys:list):
         self.mouse_pos = mouse_pos

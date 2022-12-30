@@ -6,6 +6,7 @@ from Structures.Pos import Pos
 from Structures.Color import Color
 from Structures.Rect import Rect
 from Structures import Constants as c
+from Structures.Constants import ColorTemplate as ct
 
 
 class ScrollView :
@@ -18,7 +19,7 @@ class ScrollView :
 
 
         self.rect = surface_rect
-        self.background_color: Color = c.WOODEN.copy().lerp(c.BLACK,0.3)
+        self.background_color: Color = ct.WOODEN.copy().lerp(ct.BLACK,0.3)
         self.surface: pg.surface.Surface = pg.surface.Surface(
             surface_rect.get_size()).convert_alpha()
         self.content_list: list[pg.surface.Surface] = []

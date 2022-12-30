@@ -3,10 +3,13 @@ import pygame as pg
 import pathlib
 
 from Structures import Constants as c
+from Structures.Constants import ColorTemplate as ct
+
 from Structures.Sprite import Sprite
 from Structures.Pos import Pos
 from Structures.Rect import Rect
 from Structures.Color import Color
+
 import time
 
 
@@ -29,8 +32,8 @@ class Asset :
 
         self.should_render_debug = False
 
-        self.background_color = c.P1_MINT.lerp(c.BLACK,0.6)
-        self.background_hover_color = c.P1_YELLOW.lerp(c.BLACK,0.6)
+        self.background_color = ct.P1_MINT.lerp(ct.BLACK,0.6)
+        self.background_hover_color = ct.P1_YELLOW.lerp(ct.BLACK,0.6)
 
         self.padding_left = 10
         self.padding_right = 10
@@ -92,9 +95,9 @@ class Asset :
         sprite_rect = Rect.fromPos(
             Pos(blit_point.x + self.padding_left, blit_point.y + self.padding_top), self.get_size())
 
-        pg.draw.rect(surface, c.RED.copy().set_alpha(125), sprite_rect, 1)
+        pg.draw.rect(surface, ct.RED.copy().set_alpha(125), sprite_rect, 1)
 
-        pg.draw.rect(surface, c.WHITE, Rect.fromPos(blit_point, self.get_padded_size()), 1)
+        pg.draw.rect(surface, ct.WHITE, Rect.fromPos(blit_point, self.get_padded_size()), 1)
 
     def render( self, surface: pg.surface.Surface, top_left: Pos = None, center: Pos = None ) :
         if top_left is not None : blit_point = top_left
