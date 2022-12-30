@@ -16,6 +16,31 @@ class Color(pg.color.Color):
         super().__init__(r,g,b,a)
 
 
+    def swap_max( self ,swap_target:str ):
+        if swap_target not in 'rgb': raise ValueError("BadInput")
+
+        Max = 'r'
+        container = [self.r,self.g,self.b]
+        for i in zip('rgb',container):
+            if i[1] == max(container):
+                Max = i[0] ;break
+
+        med = getattr(self,Max)
+        setattr(self,Max,getattr(self,swap_target))
+        setattr(self,swap_target,med)
+
+        return self
+
+    def flip( self, center:str ):
+        if center not in 'rgb': raise ValueError("BadInput")
+        values = list('rgb')
+        values.remove(center)
+
+        med = getattr(self, values[0])
+        setattr(self, values[0], getattr(self, values[1]))
+        setattr(self, values[1], med)
+
+        return self
 
     def get_tuple( self ) :
         return self.r, self.g, self.b, self.a
@@ -31,7 +56,6 @@ class Color(pg.color.Color):
 
 
     def set_alpha( self, alpha: int ) :
-
         self.a = alpha
         return self
 
