@@ -43,7 +43,7 @@ class AssetManager :
         self.asset_bgc = ct.P1_PEACH
         self.asset_hover_bgc = ct.P1_YELLOW
 
-        self.selected_asset_bgc = self.asset_bgc.copy().swap_max('g')
+        self.selected_asset_bgc = self.asset_hover_bgc.copy().lerp(ct.P1_PEACH,0.5)
 
 
 

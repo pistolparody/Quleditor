@@ -10,7 +10,8 @@ from Editor import Editor
 from Structures.Color import Color
 
 
-color = Color(0,0,0).swap_max('r')
+color = Color(0,0,0).flip('r')
+
 
 
 

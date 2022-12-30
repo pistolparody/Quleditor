@@ -26,8 +26,8 @@ class Color(pg.color.Color):
         Max = 'r'
         container = [self.r,self.g,self.b]
         for name, value in zip('rgb',container):
-            if name == max(container):
-                Max = value
+            if value == max(container):
+                Max = name
                 break
 
         med = getattr(self,Max)
@@ -38,11 +38,21 @@ class Color(pg.color.Color):
 
 
     def flip( self, center: str ) :
-        """ swap the bits that are not center """
-        if center not in 'rgb': raise ValueError("BadInput")
+        if center == "r" :
+            self.g, self.b = self.b, self.g
+        elif center == "g" :
+            self.g, self.b = self.b, self.g
+        elif center == "b" :
+            self.r, self.g = self.g, self.r
+        else :
+            raise ValueError("BadInput")
 
-        (a, b), d = set('rgb') - {center}, self.__dict__
-        d[a], d[b] = d[b], d[a]
+    # def flip( self, center: str ) :
+    #     """ swap the bits that are not center """
+    #     if center not in 'rgb': raise ValueError("BadInput")
+    #
+    #     (a, b), d = set('rgb') - {center}, self.__dict__
+    #     d[a], d[b] = d[b], d[a]
 
 
 
