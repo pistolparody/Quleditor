@@ -1,4 +1,4 @@
-import pygame as pg
+from pygame.color import Color as pg_color
 
-class Color(pg.color.Color):
+class Color(pg_color):
     pass

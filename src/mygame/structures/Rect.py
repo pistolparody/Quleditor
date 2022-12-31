@@ -1,9 +1,9 @@
-import pygame as pg
+from pygame.rect import Rect as pg_rect
 from .Pos import Pos
 
-class Rect(pg.rect.Rect):
+class Rect(pg_rect):
 
-    def __init__( self,x:float=0,y:float=0,width:float=0,height:float=0,rect=None ) -> None :
+    def __init__( self,x:int=0,y:int=0,width:int=0,height:int=0,rect=None ) -> None :
         if rect is not None:
             super().__init__(rect)
             return
@@ -11,17 +11,17 @@ class Rect(pg.rect.Rect):
         super().__init__(x,y,width,height)
 
 
-    def reset_pos( self,x:float=0,y:float=0,pos:Pos=None ):
+    def reset_pos( self,x:int=0,y:int=0,pos:Pos=None ):
         if pos is not None:
-            self.x,self.y = pos.x,pos.y
+            self.x,self.y = int(pos.x),int(pos.y)
             return
 
         self.x,self.y = x,y
 
 
-    def reset_size( self, width: float = 0, height: float = 0, size: Pos = None ) :
+    def reset_size( self, width: int = 0, height: int = 0, size: Pos = None ) :
         if size is not None :
-            self.width, self.height = size.x, size.y
+            self.width, self.height = int(size.x), int(size.y)
             return
 
         self.width, self.height = width, height

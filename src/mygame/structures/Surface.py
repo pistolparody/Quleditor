@@ -1,4 +1,4 @@
-import pygame as pg
+from pygame.surface import Surface as pg_surface
 
-class Surface(pg.surface.Surface):
+class Surface(pg_surface):
     pass
