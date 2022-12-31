@@ -21,6 +21,7 @@ class ScrollView :
         self.scroll_pane_width = scroll_pane_width
         self.scroll_wheel_color = ct.WOODEN
         self.scroll_wheel_triggered = False
+        self.scroll_wheel_released = False
 
         self.surface_rect = surface_rect
         self.background_color: Color = ct.WOODEN.copy().lerp(ct.BLACK, 0.3)
@@ -100,7 +101,10 @@ class ScrollView :
                 self.mouse_rel.reset_by_tuple(i.rel)
 
     def check_events( self ) :
+        self.scroll_wheel_released = False
         if c.MOUSE_LEFT not in self.held_mouse_keys:
+            if self.scroll_wheel_triggered:
+                self.scroll_wheel_released = True
             self.scroll_wheel_triggered = False
 
         if c.MOUSE_LEFT in self.held_mouse_keys :

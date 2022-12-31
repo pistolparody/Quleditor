@@ -32,9 +32,8 @@ class AssetManager :
 
         target_folder = '/home/yolo/Workstation/Assets/bunch_of_assets'
         dropped_files = []
-        if os.path.exists(target_folder):
+        if os.path.exists(target_folder) :
             dropped_files = [f'{target_folder}/{i}' for i in os.listdir(target_folder)]
-
 
         self.last_dropped_files = []
         self.last_active_group = None
@@ -53,13 +52,11 @@ class AssetManager :
         self.light_theme_colors: list[Color] = [self.background_color, self.asset_group_bgc,
             self.asset_bgc, self.asset_hover_bgc, self.selected_asset_bgc]
 
-
         self.dark_theme_colors = [i.lerp(ct.BLACK, self.dark_theme_shade_scale) for i in
             self.light_theme_colors]
 
-        self.scroll_view = ScrollView(Rect(0, 0, screen_size.x * 0.7, screen_size.y)
-                            ,screen_size.x*0.02
-                            ,screen_size.y*0.1)
+        self.scroll_view = ScrollView(Rect(0, 0, screen_size.x * 0.7, screen_size.y),
+            screen_size.x * 0.02, screen_size.y * 0.1)
 
         self.scroll_view.background_color = ct.GRAY
         self.receive_dropped_files(dropped_files)
@@ -80,8 +77,6 @@ class AssetManager :
             m_pos.y -= self.scroll_view.get_content_height(counter)
             i.set_mouse_data(m_pos, pressed_mouse_keys, held_mouse_keys)
             counter += 1
-
-
 
 
     def toggle_dark_theme( self ) :
@@ -153,7 +148,6 @@ class AssetManager :
 
 
     def check_events( self ) :
-
         if self.scroll_view.scroll_request.is_origin() :
             should_unselect = False
             counter = 0
@@ -174,11 +168,17 @@ class AssetManager :
                         i.update_surface()
                     counter += 1
 
-            if any([k.hover_action_updated for k in self.asset_group_list]) or any(
-                    [k.new_selection for k in self.asset_group_list]) :
+            if self.scroll_view.scroll_wheel_released :
+                print("released")
+
+            if (any([k.hover_action_updated for k in self.asset_group_list]) or any(
+                    [k.new_selection for k in
+                        self.asset_group_list]) or self.scroll_view.scroll_wheel_released)\
+                    and not self.scroll_view.scroll_wheel_triggered :
+
+
                 self.scroll_view.content_list = [i.surface for i in self.asset_group_list]
                 self.scroll_view.update_surface(False)
-
 
         self.scroll_view.check_events()
 
