@@ -14,6 +14,15 @@ class Pos(Vector2) :
     def copy( self ) :
         return Pos(pos=self)
 
+    def swap( self,pos ):
+        self.x,pos.x = pos.x,self.x
+        self.y,pos.y = pos.y,self.y
+
+        return self
+
+
+    def get_tuple( self ):
+        return self.x,self.y
 
     def reset( self, new_x: float = 0, new_y: float = 0, pos=None, ) :
         if pos is not None :
@@ -23,8 +32,8 @@ class Pos(Vector2) :
         self.x, self.y = new_x, new_y
 
 
-    def lerp_me( self, pos, value: float ) :
-        lerped = self.lerp(pos, value)
+    def lerp_me( self, pos, amount: float ) :
+        lerped = self.lerp(pos, amount)
         self.x, self.y = lerped.x, lerped.y
 
 
@@ -138,8 +147,3 @@ class Pos(Vector2) :
         self.x,self.y = self.y,self.x
         return self
 
-    def swap_pos( self,pos ):
-        self.x,pos.x = pos.x,self.x
-        self.y,pos.y = pos.y,self.y
-
-        return self

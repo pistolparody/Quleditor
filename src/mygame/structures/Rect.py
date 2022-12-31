@@ -11,6 +11,20 @@ class Rect(pg_rect):
         super().__init__(x,y,width,height)
 
 
+    def copy( self ):
+        return Rect(rect=self)
+
+    def swap( self,rect ):
+        self.x,rect.x = rect.x,self.x
+        self.y,rect.y = rect.y,self.y
+        self.width,rect.width = rect.width,self.width
+        self.height,rect.height = rect.height,self.height
+
+        return self
+
+    def get_tuple( self ):
+        return self.x,self.y,self.width,self.height
+
     def reset_pos( self,x:int=0,y:int=0,pos:Pos=None ):
         if pos is not None:
             self.x,self.y = int(pos.x),int(pos.y)
