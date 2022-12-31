@@ -20,8 +20,17 @@ class Pos(Vector2) :
         return Pos(self.x, self.y)
 
 
-    def reset( self, new_x: float = 0, new_y: float = 0 ) :
-        self.x, self.y = new_x, new_y
+    def reset( self, new_x: float = None, new_y: float = None, should_keep: bool = False ) :
+        if should_keep :
+            if new_x is None : new_x = self.x
+            if new_y is None : new_y = self.y
+
+            self.x, self.y = new_x, new_y
+        else :
+            if new_x is None : new_x = 0
+            if new_y is None : new_y = 0
+
+            self.x, self.y = new_x, new_y
 
         return self
 
