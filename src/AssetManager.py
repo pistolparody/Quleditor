@@ -58,7 +58,8 @@ class AssetManager :
             self.light_theme_colors]
 
         self.scroll_view = ScrollView(Rect(0, 0, screen_size.x * 0.7, screen_size.y)
-                            ,screen_size.x*0.1)
+                            ,screen_size.x*0.02
+                            ,screen_size.y*0.1)
 
         self.scroll_view.background_color = ct.GRAY
         self.receive_dropped_files(dropped_files)
