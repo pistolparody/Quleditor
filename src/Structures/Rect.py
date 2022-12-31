@@ -11,10 +11,10 @@ class Rect(pg.rect.Rect):
         super().__init__(left,top,width,height)
 
     def copy( self ) :
-        return Rect(self.left,self.top,self.width,self.height)
+        return Rect(self.x,self.y,self.width,self.height)
 
     def get_pos( self ):
-        return Pos(self.left,self.top)
+        return Pos(self.x,self.y)
 
     def get_size( self ):
         return Pos( self.width, self.height )
@@ -25,7 +25,7 @@ class Rect(pg.rect.Rect):
 
     def transform_pos( self , Sum: float = 0, mult: float = 1, sum_first: bool = False ) :
         pos = self.get_pos().get_transformed_pos(Sum, mult, sum_first)
-        self.left,self.top = pos.get_tuple()
+        self.x,self.y = pos.get_tuple()
         return self
 
     def transform_size( self , Sum: float = 0, mult: float = 1, sum_first: bool = False ) :
@@ -40,12 +40,12 @@ class Rect(pg.rect.Rect):
             if new_x is None : new_x = self.x
             if new_y is None : new_y = self.y
 
-            self.top, self.left = new_y, new_x
+            self.x, self.y = new_x, new_y
         else:
             if new_x is None: new_x = 0
             if new_y is None: new_y = 0
 
-            self.top , self.left = new_y , new_x
+            self.x , self.y = new_x , new_y
 
         return self
 
@@ -54,8 +54,8 @@ class Rect(pg.rect.Rect):
 
 
         if should_keep:
-            if new_x is None : new_x = self.x
-            if new_y is None : new_y = self.y
+            if new_x is None : new_x = self.width
+            if new_y is None : new_y = self.height
 
             self.width, self.height = new_x, new_y
         else:
