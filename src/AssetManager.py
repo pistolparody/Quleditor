@@ -25,7 +25,7 @@ class AssetManager :
         self.asset_max_size = Pos(50, 50)
 
         self.asset_group_list: list[AssetGroup] = []
-        self.asset_group_limit = 10
+        self.asset_group_limit = 36
 
         self.pressed_mouse_keys = []
         self.held_mouse_keys = []
@@ -72,6 +72,8 @@ class AssetManager :
         self.pressed_mouse_keys = pressed_mouse_keys
         self.held_mouse_keys = held_mouse_keys
 
+        self.scroll_view.set_mouse_data(mouse_pos, pressed_mouse_keys, held_mouse_keys)
+
         counter = 0
         for i in self.asset_group_list :
             m_pos = self.mouse_pos.copy().join(self.scroll_view.scroll_rel.get_flipped())
@@ -112,6 +114,7 @@ class AssetManager :
         if event_list is None : event_list = []
 
         # self.asset_group.get_events(event_list=event_list)
+        self.scroll_view.get_events(event_list)
 
         if len(self.pressed_mouse_keys) : self.scroll_view.scroll_request.reset()
 
@@ -132,7 +135,7 @@ class AssetManager :
 
             color = Color.randomColor().lerp(ct.BLACK, 0.7)
             self.asset_group_list.append(
-                AssetGroup(Rect.fromPos(Pos(0, 0), self.scroll_view.content_rect.get_size())))
+                AssetGroup(Rect.fromPos(Pos(0, 0), self.scroll_view.surface_rect.get_size())))
 
             self.asset_group_list[-1].background_color = color
             self.asset_group_list[-1].name = str(counter)
@@ -150,6 +153,7 @@ class AssetManager :
 
 
     def check_events( self ) :
+
         if self.scroll_view.scroll_request.is_origin() :
             should_unselect = False
             counter = 0
@@ -174,6 +178,7 @@ class AssetManager :
                     [k.new_selection for k in self.asset_group_list]) :
                 self.scroll_view.content_list = [i.surface for i in self.asset_group_list]
                 self.scroll_view.update_surface(False)
+
 
         self.scroll_view.check_events()
 
