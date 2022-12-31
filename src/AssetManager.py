@@ -57,7 +57,9 @@ class AssetManager :
         self.dark_theme_colors = [i.lerp(ct.BLACK, self.dark_theme_shade_scale) for i in
             self.light_theme_colors]
 
-        self.scroll_view = ScrollView(Rect(0, 0, screen_size.x * 0.7, screen_size.y))
+        self.scroll_view = ScrollView(Rect(0, 0, screen_size.x * 0.7, screen_size.y)
+                            ,screen_size.x*0.1)
+
         self.scroll_view.background_color = ct.GRAY
         self.receive_dropped_files(dropped_files)
 
@@ -129,7 +131,7 @@ class AssetManager :
 
             color = Color.randomColor().lerp(ct.BLACK, 0.7)
             self.asset_group_list.append(
-                AssetGroup(Rect.fromPos(Pos(0, 0), self.scroll_view.rect.get_size())))
+                AssetGroup(Rect.fromPos(Pos(0, 0), self.scroll_view.content_rect.get_size())))
 
             self.asset_group_list[-1].background_color = color
             self.asset_group_list[-1].name = str(counter)

@@ -22,7 +22,7 @@ editor = Editor(window.get_window_size())
 
 frames = 0
 l_time = time.time()
-check_fps = 1
+check_fps = 0
 
 
 while window.is_running:
