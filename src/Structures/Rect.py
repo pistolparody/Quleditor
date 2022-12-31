@@ -35,14 +35,34 @@ class Rect(pg.rect.Rect):
         return self
 
 
-    def reset_pos( self, new_x: float = 0, new_y: float = 0 ) :
-        self.top , self.left = new_y , new_x
+    def reset_pos( self, new_x: float = None, new_y: float = None,should_keep:bool=False) :
+        if should_keep:
+            if new_x is None : new_x = self.x
+            if new_y is None : new_y = self.y
+
+            self.top, self.left = new_y, new_x
+        else:
+            if new_x is None: new_x = 0
+            if new_y is None: new_y = 0
+
+            self.top , self.left = new_y , new_x
 
         return self
 
 
-    def reset_size( self, new_x: float = 0, new_y: float = 0 ) :
-        self.width, self.height = new_x, new_y
+    def reset_size( self, new_x: float = None, new_y: float = None ,should_keep:bool=False) :
+
+
+        if should_keep:
+            if new_x is None : new_x = self.x
+            if new_y is None : new_y = self.y
+
+            self.width, self.height = new_x, new_y
+        else:
+            if new_x is None : new_x = 0
+            if new_y is None : new_y = 0
+
+            self.width, self.height = new_x, new_y
 
         return self
 
