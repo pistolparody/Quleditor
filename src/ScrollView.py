@@ -20,6 +20,7 @@ class ScrollView :
 
         self.scroll_pane_width = scroll_pane_width
         self.scroll_wheel_color = ct.WOODEN
+        self.scroll_wheel_triggered = False
 
         self.surface_rect = surface_rect
         self.background_color: Color = ct.WOODEN.copy().lerp(ct.BLACK, 0.3)
@@ -99,25 +100,31 @@ class ScrollView :
                 self.mouse_rel.reset_by_tuple(i.rel)
 
     def check_events( self ) :
-        if c.MOUSE_LEFT in self.held_mouse_keys :
-            if self.scroll_wheel_rect.collidepoint(self.mouse_pos) :
-                pg.mouse.set_pos(self.scroll_wheel_rect.get_center())
-                self.mouse_pos = self.scroll_wheel_rect.get_center().join(self.mouse_rel)
+        if c.MOUSE_LEFT not in self.held_mouse_keys:
+            self.scroll_wheel_triggered = False
 
+        if c.MOUSE_LEFT in self.held_mouse_keys :
+            trigger = self.scroll_wheel_rect.collidepoint(self.mouse_pos)
+            hold_rect = self.surface_rect.copy()
+            hold_rect.width *= 2
+            on_hold = hold_rect.collidepoint(self.mouse_pos)
+            if trigger or (on_hold and self.scroll_wheel_triggered):
+                self.scroll_wheel_triggered = True
                 mouse_pos = self.mouse_pos.copy()
                 mouse_pos.y -= self.scroll_wheel_rect.height / 2
 
                 A = self.content_height - self.surface_rect.height
                 B = self.surface_rect.height - self.scroll_wheel_rect.height
                 C = get_percent(B, mouse_pos.y)
+
                 if C < 0: C = 0
                 if C > 100: C = 100
                 D = A * C / 100
-                print([round(i, 2) for i in
-                    [A, B, C, D, self.content_height, self.surface_rect.height, self.scroll_rel.y]])
 
                 self.scroll_rel.y = - D
                 self.update_surface(False)
+
+
 
         # self.mouse_rel.reset()
 
