@@ -128,3 +128,18 @@ class Pos(Vector2) :
         self.y = center.y * 2 - self.y
 
         return self
+
+    def reverse( self ):
+        copy_cat = self.copy()
+        copy_cat.x,copy_cat.y = copy_cat.y,copy_cat.x
+        return copy_cat
+
+    def reverse_me( self ):
+        self.x,self.y = self.y,self.x
+        return self
+
+    def swap_pos( self,pos ):
+        self.x,pos.x = pos.x,self.x
+        self.y,pos.y = pos.y,self.y
+
+        return self
