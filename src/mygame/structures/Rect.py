@@ -11,14 +11,6 @@ class Rect(pg.rect.Rect):
         super().__init__(x,y,width,height)
 
 
-
-
-    def get_pos( self ) -> Pos:
-        return Pos(self.x,self.y)
-
-    def get_size( self ) -> Pos:
-        return Pos(self.width,self.height)
-
     def reset_pos( self,x:float=0,y:float=0,pos:Pos=None ):
         if pos is not None:
             self.x,self.y = pos.x,pos.y
@@ -33,3 +25,9 @@ class Rect(pg.rect.Rect):
             return
 
         self.width, self.height = width, height
+
+    def get_pos( self ) -> Pos:
+        return Pos(self.x,self.y)
+
+    def get_size( self ) -> Pos:
+        return Pos(self.width,self.height)
