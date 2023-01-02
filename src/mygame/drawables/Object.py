@@ -2,13 +2,26 @@ import pygame as pg
 
 from ..structures.Pos import Pos
 from ..structures.Rect import Rect
-from ..structures.Color import Color
+from ..structures import Color
 from ..structures.Surface import Surface
 
+# It could have been DrawableObject but that's not finger friendly
+class Object(object) :
+    """
+    "Object" contains the information about how something should be rendered
+    on the screen.
+    The content to be rendered is provided by subclasses that use this class
+     it has padding, border and margin properties.
+    But its functionality is completely different from HTML drawable objects.
+    Since the rect parameter which is fed to this Object while initialization determines
+     an absolute rendering point and  DOES NOT CHANGE IN RELATION TO OTHER OBJECTS.
+    So the rectangular size of the content to be rendered is:
+        content_width = rect.width - padding_horizontal + border_horizontal + margin_horizontal
+        content_height = rect.height - padding_vertical + border_vertical + margin_vertical
 
-class Object :
-
+    """
     def __init__( self, rect: Rect ) :
+
         self.rect: Rect = rect
 
         self.__padding_left = 0
