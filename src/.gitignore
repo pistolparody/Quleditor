@@ -1,6 +1,7 @@
+# __pycache__
 __pycache__
 mygame/structures/__pycache__
 mygame/os/__pycache__
 mygame/drawables/__pycache__
 mygame/activity/__pycache__
-
+mygame/globals/__pycache__

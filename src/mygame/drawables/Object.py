@@ -51,8 +51,8 @@ class Object(object) :
 
 
     @property
-    def all_attrs( self ) :
-        text = "Object {\n";
+    def all_attrs( self ) -> str :
+        text = "Object {\n"
         L = vars(self)
         for i in L :
             text += "\t" + str(i) + " = " + str(L[i]) + "\n"
@@ -61,7 +61,7 @@ class Object(object) :
 
 
     @property
-    def padding( self ) :
+    def padding( self ) -> tuple[float,float,float,float]:
         return self.__padding_left, self.__padding_top, self.__padding_right, self.__padding_bottom
 
 
@@ -72,7 +72,7 @@ class Object(object) :
 
 
     @property
-    def margin( self ) :
+    def margin( self ) -> tuple[float,float,float,float] :
         return self.__margin_left, self.__margin_top, self.__margin_right, self.__margin_bottom
 
 
@@ -80,6 +80,18 @@ class Object(object) :
     def margin( self, new_margin: tuple[float, float, float, float] ) :
         self.__margin_left, self.__margin_top = new_margin[:2]
         self.__margin_right, self.__margin_bottom = new_margin[2 :]
+
+
+    @property
+    def border( self ) -> tuple[int, int, int, int] :
+        return self.__border_left_width, self.__border_top_width,\
+            self.__border_right_width, self.__border_bottom_width
+
+
+    @border.setter
+    def border( self, new_border: tuple[int, int, int, int] ) :
+        self.__border_left_width, self.__border_top_width = new_border[:2]
+        self.__border_right_width, self.__border_bottom_width = new_border[2 :]
 
 
     @property
