@@ -32,3 +32,6 @@ class Color(pg_color) :
     def lerp_me( self,color,amount:float ):
         lerped_me = self.lerp(color,amount)
         self.r,self.g,self.b,self.a = color.get_tuple()
+
+    class Constants:
+        BLACK = Color(0,0,0)
