@@ -26,7 +26,8 @@ class Object :
         self.__border_top_width = 0
         self.__border_bottom_width = 0
 
-        self.__border_color = Color.
+        self.__border_color = Color.Constants.BLACK
+
 
         self.__left_neighbor: Object or None = None
         self.__right_neighbor: Object or None = None
