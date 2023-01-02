@@ -25,6 +25,11 @@ class Rect(pg_rect):
     def get_tuple( self ):
         return self.x,self.y,self.width,self.height
 
+    def reset( self,rect ):
+        self.x,self.y = rect.get_pos()
+        self.width,self.height = rect.get_size()
+        return self
+
     def reset_pos( self,x:int=0,y:int=0,pos:Pos=None ):
         if pos is not None:
             self.x,self.y = int(pos.x),int(pos.y)

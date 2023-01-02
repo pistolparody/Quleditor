@@ -22,7 +22,7 @@ class Object(object) :
     """
     def __init__( self, rect: Rect ) :
 
-        self.rect: Rect = rect
+        self.__rect: Rect = rect
 
         self.__padding_left = 0
         self.__padding_right = 0
@@ -49,15 +49,56 @@ class Object(object) :
 
         super(Object, self).__init__()
 
+    def __str__(self):
+        return f'Object{{\n\trect:{self.margined_rect}\n\tmargin:{self.margin}'\
+               f'\n\tborder:{self.border}'\
+               f'\n\tpadding:{self.padding}\n\tneighbors:{self.neighbors}\n}}'
 
     @property
-    def all_attrs( self ) -> str :
-        text = "Object {\n"
-        L = vars(self)
-        for i in L :
-            text += "\t" + str(i) + " = " + str(L[i]) + "\n"
-        text += "}"
-        return text
+    def margined_rect( self ):
+        return self.__rect
+
+    @margined_rect.setter
+    def margined_rect( self,p_rect:Rect ):
+        self.__rect.reset(p_rect)
+
+    @property
+    def bordered_rect( self ):
+        rect = self.margined_rect.copy()
+
+        rect.x += self.__margin_left
+        rect.width -= self.__margin_right
+
+        rect.y += self.__margin_top
+        rect.height -= self.__margin_bottom
+
+        return rect
+
+    @property
+    def padded_rect( self ):
+        rect = self.bordered_rect.copy()
+
+        rect.x += self.__border_left_width
+        rect.width -= self.__border_right_width
+
+        rect.y += self.__border_top_width
+        rect.height -= self.__border_bottom_width
+
+        return rect
+
+
+    @property
+    def content_rect( self ) :
+        rect = self.padded_rect.copy()
+
+        rect.x += self.__padding_left
+        rect.width -= self.__padding_right
+
+        rect.y += self.__padding_top
+        rect.height -= self.__padding_bottom
+
+        return rect
+
 
 
     @property
@@ -106,3 +147,15 @@ class Object(object) :
 
     def render( self ) :
         pass
+
+
+
+
+
+    def all_attrs( self ) -> str :
+        text = "Object {\n"
+        L = vars(self)
+        for i in L :
+            text += "\t" + str(i) + " = " + str(L[i]) + "\n"
+        text += "}"
+        return text
