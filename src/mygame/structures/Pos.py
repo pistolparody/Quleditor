@@ -20,8 +20,8 @@ class Pos(Vector2) :
 
         return self
 
-
-    def get_tuple( self ):
+    @property
+    def as_tuple( self ):
         return self.x,self.y
 
     def reset( self, new_x: float = 0, new_y: float = 0, pos=None, ) :

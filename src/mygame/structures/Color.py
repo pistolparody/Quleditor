@@ -26,12 +26,15 @@ class Color(pg_color) :
 
         return self
 
-    def get_tuple( self ):
+    @property
+    def as_tuple( self ):
         return self.r,self.g,self.b,self.a
 
     def lerp_me( self,color,amount:float ):
         lerped_me = self.lerp(color,amount)
-        self.r,self.g,self.b,self.a = color.get_tuple()
+        self.r,self.g,self.b,self.a = lerped_me
+
+        return self
 
 class Constants:
     BLACK = Color(0,0,0)

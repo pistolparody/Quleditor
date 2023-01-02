@@ -148,10 +148,6 @@ class Object(object) :
     def render( self ) :
         pass
 
-
-
-
-
     def all_attrs( self ) -> str :
         text = "Object {\n"
         L = vars(self)

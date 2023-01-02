@@ -22,7 +22,8 @@ class Rect(pg_rect):
 
         return self
 
-    def get_tuple( self ):
+    @property
+    def as_tuple( self ):
         return self.x,self.y,self.width,self.height
 
     def reset( self,rect ):
@@ -45,8 +46,20 @@ class Rect(pg_rect):
 
         self.width, self.height = width, height
 
-    def get_pos( self ) -> Pos:
+    @property
+    def pos( self ) -> Pos:
         return Pos(self.x,self.y)
 
-    def get_size( self ) -> Pos:
+    @pos.setter
+    def pos( self,p_pos:Pos ):
+        self.x = int(p_pos.x)
+        self.y = int(p_pos.y)
+
+    @property
+    def size( self ) -> Pos:
         return Pos(self.width,self.height)
+
+    @size.setter
+    def size( self, size: Pos ) :
+        self.width = int(size.x)
+        self.height = int(size.y)
