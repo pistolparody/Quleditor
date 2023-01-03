@@ -1,9 +1,13 @@
+from typing import Optional
+
 import pygame as pg
 
 from ..structures.Pos import Pos
 from ..structures.Rect import Rect
-from ..structures import Color
+from ..structures.Color import Color,ColorConstants
 from ..structures.Surface import Surface
+
+colors = ColorConstants
 
 # It could have been DrawableObject but that's not finger friendly
 class Object(object) :
@@ -24,6 +28,12 @@ class Object(object) :
 
         self.__rect: Rect = rect
 
+        self.__margined_color: Optional[Color,None] = None
+        self.__bordered_color: Optional[Color,None] = None
+        self.__padded_color: Optional[Color,None] = None
+        self.__content_color: Optional[Color,None] = None
+
+
         self.__padding_left = 0
         self.__padding_right = 0
         self.__padding_top = 0
@@ -39,13 +49,16 @@ class Object(object) :
         self.__border_top_width = 0
         self.__border_bottom_width = 0
 
-        self.__border_color = Color.Constants.BLACK
+        self.__border_color = ColorConstants.BLACK
 
 
-        self.__left_neighbor: Object or None = None
-        self.__right_neighbor: Object or None = None
-        self.__top_neighbor: Object or None = None
-        self.__bottom_neighbor: Object or None = None
+        self.__left_neighbor: Optional[Object,None] = None
+        self.__right_neighbor: Optional[Object,None] = None
+        self.__top_neighbor: Optional[Object,None] = None
+        self.__bottom_neighbor: Optional[Object,None] = None
+
+        self.color = colors.BLUE,colors.BLACK,colors.GREEN,colors.WHITE
+
 
         super(Object, self).__init__()
 
@@ -53,6 +66,20 @@ class Object(object) :
         return f'Object{{\n\trect:{self.margined_rect}\n\tmargin:{self.margin}'\
                f'\n\tborder:{self.border}'\
                f'\n\tpadding:{self.padding}\n\tneighbors:{self.neighbors}\n}}'
+
+    @property
+    def color( self ):
+        return self.__margined_color,self.__bordered_color,self.__padded_color,self.__content_color
+
+    @color.setter
+    def color( self,colors_:tuple[Color,Color,Color,Color] ):
+        self.__margined_color = colors_[0]
+        self.__bordered_color = colors_[1]
+        self.__padded_color = colors_[2]
+        self.__content_color = colors_[3]
+
+
+
 
     @property
     def margined_rect( self ):
@@ -145,8 +172,11 @@ class Object(object) :
         self.__padding_left, self.__padding_top = new_neighbors[:2]
         self.__padding_right, self.__padding_bottom = new_neighbors[2 :]
 
-    def render( self ) :
-        pass
+    def render( self,surface:pg.surface.Surface ) :
+        pg.draw.rect(surface,self.__margined_color,self.margined_rect)
+        pg.draw.rect(surface,self.__bordered_color,self.bordered_rect)
+        pg.draw.rect(surface,self.__padded_color,self.padded_rect)
+        pg.draw.rect(surface,self.__content_color,self.content_rect)
 
     def all_attrs( self ) -> str :
         text = "Object {\n"
