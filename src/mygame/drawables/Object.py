@@ -94,10 +94,10 @@ class Object(object) :
         rect = self.margined_rect.copy()
 
         rect.x += self.__margin_left
-        rect.width -= self.__margin_right
+        rect.width -= self.__margin_right * 2
 
         rect.y += self.__margin_top
-        rect.height -= self.__margin_bottom
+        rect.height -= self.__margin_bottom * 2
 
         return rect
 
@@ -106,10 +106,10 @@ class Object(object) :
         rect = self.bordered_rect.copy()
 
         rect.x += self.__border_left_width
-        rect.width -= self.__border_right_width
+        rect.width -= self.__border_right_width * 2
 
         rect.y += self.__border_top_width
-        rect.height -= self.__border_bottom_width
+        rect.height -= self.__border_bottom_width * 2
 
         return rect
 
@@ -119,10 +119,10 @@ class Object(object) :
         rect = self.padded_rect.copy()
 
         rect.x += self.__padding_left
-        rect.width -= self.__padding_right
+        rect.width -= self.__padding_right * 2
 
         rect.y += self.__padding_top
-        rect.height -= self.__padding_bottom
+        rect.height -= self.__padding_bottom * 2
 
         return rect
 
