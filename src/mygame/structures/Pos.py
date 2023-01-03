@@ -3,7 +3,11 @@ from pygame.math import Vector2
 
 class Pos(Vector2) :
 
-    def __init__( self, x: float = 0, y: float = 0, pos=None ) -> None :
+    def __init__( self, x: float = 0, y: float = 0, pos=None,as_tuple=None ) -> None :
+        if as_tuple is not None:
+            super(Pos, self).__init__(as_tuple)
+            return
+
         if pos is not None :
             super().__init__(pos)
             return
@@ -24,7 +28,11 @@ class Pos(Vector2) :
     def as_tuple( self ):
         return self.x,self.y
 
-    def reset( self, new_x: float = 0, new_y: float = 0, pos=None, ) :
+    def reset( self, new_x: float = 0, new_y: float = 0, pos=None,as_tuple=None ) :
+        if as_tuple is not None :
+            self.x,self.y = as_tuple[0],as_tuple[1]
+            return
+
         if pos is not None :
             self.x, self.y = pos.x, pos.y
             return
