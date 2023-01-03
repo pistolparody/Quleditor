@@ -25,14 +25,14 @@ class Window(EventHolder,Object):
 
         diff_in_size = window_new_size.join(self.window_content_size.transform(mult_xy=-1))
 
-        margin_horizontal = diff_in_size.x * 0.6 / 2
-        margin_vertical = diff_in_size.y * 0.6 / 2
+        margin_horizontal = diff_in_size.x * 0.8 / 2
+        margin_vertical = diff_in_size.y * 0.8 / 2
 
-        border_horizontal = diff_in_size.x * 0.1 / 2
-        border_vertical = diff_in_size.y * 0.1 / 2
+        border_horizontal = diff_in_size.x * 0.05 / 2
+        border_vertical = diff_in_size.y * 0.05 / 2
 
-        padding_horizontal = diff_in_size.x * 0.3 / 2
-        padding_vertical = diff_in_size.y * 0.3 / 2
+        padding_horizontal = diff_in_size.x * 0.15 / 2
+        padding_vertical = diff_in_size.y * 0.15 / 2
 
         self.margin = margin_horizontal,margin_vertical,\
                             margin_horizontal,margin_vertical
