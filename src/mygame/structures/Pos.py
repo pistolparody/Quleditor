@@ -50,7 +50,7 @@ class Pos(Vector2) :
         copy_cat.x += pos.x
         copy_cat.y += pos.y
 
-        return self
+        return copy_cat
 
 
     def join_me( self, pos ) :
@@ -117,16 +117,16 @@ class Pos(Vector2) :
         copy_cat = self.copy()
 
         if sum_y is None :
-            self.sum_me(sum_xy, sum_xy)
+            copy_cat.sum_me(sum_xy, sum_xy)
         else :
-            self.sum_me(sum_xy, sum_y)
+            copy_cat.sum_me(sum_xy, sum_y)
 
         if mult_y is None :
-            self.mult_me(mult_xy, mult_xy)
+            copy_cat.mult_me(mult_xy, mult_xy)
         else :
-            self.mult_me(mult_xy, mult_y)
+            copy_cat.mult_me(mult_xy, mult_y)
 
-        return self
+        return copy_cat
 
 
     def flip( self, center=None ) :

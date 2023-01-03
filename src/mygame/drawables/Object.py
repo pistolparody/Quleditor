@@ -79,8 +79,6 @@ class Object(object) :
         self.__content_color = colors_[3]
 
 
-
-
     @property
     def margined_rect( self ):
         return self.__rect
@@ -179,7 +177,7 @@ class Object(object) :
         pg.draw.rect(surface,self.__margined_color
             ,self.margined_rect)
         pg.draw.rect(surface,self.__bordered_color
-            ,self.bordered_rect,border[0],border[1],border[2],border[3])
+            ,self.bordered_rect)
 
         pg.draw.rect(surface,self.__padded_color,self.padded_rect)
 

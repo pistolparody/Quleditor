@@ -9,7 +9,7 @@ from mygame.structures.Color import Color,ColorConstants
 from mygame.os.Window import Window
 
 pg.init()
-window = Window(Pos(500,500))
+window = Window(Pos(800,600),Pos(500,500))
 
 while not window.should_quit:
     window.get_events()
