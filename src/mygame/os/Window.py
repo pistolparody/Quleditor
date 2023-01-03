@@ -16,7 +16,7 @@ class Window(EventHolder,Object):
         self.margin = 25,25,25,25
         self.border = 5,5,5,5
         self.padding = 30,30,30,30
-        self.color = colors.BLUE, colors.BLACK, colors.GREEN, colors.RED
+        self.color = colors.RED, colors.GREEN, colors.BLUE, colors.BLACK
 
         print(self.surface)
 

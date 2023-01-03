@@ -173,9 +173,16 @@ class Object(object) :
         self.__padding_right, self.__padding_bottom = new_neighbors[2 :]
 
     def render( self,surface:pg.surface.Surface ) :
-        pg.draw.rect(surface,self.__margined_color,self.margined_rect)
-        pg.draw.rect(surface,self.__bordered_color,self.bordered_rect)
+
+        border = [int(i) for i in self.border]
+
+        pg.draw.rect(surface,self.__margined_color
+            ,self.margined_rect)
+        pg.draw.rect(surface,self.__bordered_color
+            ,self.bordered_rect,border[0],border[1],border[2],border[3])
+
         pg.draw.rect(surface,self.__padded_color,self.padded_rect)
+
         pg.draw.rect(surface,self.__content_color,self.content_rect)
 
     def all_attrs( self ) -> str :
