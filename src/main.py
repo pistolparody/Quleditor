@@ -46,14 +46,14 @@ while not window.should_quit :
 
 
     if K_a in window.keyboard_held_keys:
-        cube = rand(100,100)
+        cube = rand(40,40)
         cont.create_object(Pos(cube,cube))
-        print_objects()
+
 
     if K_s in window.keyboard_pressed_keys:
-        cube = rand(100,100)
+        cube = rand(40,40)
         cont.create_object(Pos(cube,cube))
-        print_objects()
+
 
 
     window.check_events()

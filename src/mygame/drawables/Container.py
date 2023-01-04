@@ -43,7 +43,7 @@ class Container(Object):
                     pos.y += last_line_max_height
                     last_line_max_height = i.height
 
-            if pos.y + i.height > self.content_rect.x+self.content_rect.height:
+            if pos.y + i.height > self.content_rect.y+self.content_rect.height:
                 self.object_list.clear()
                 return
 
