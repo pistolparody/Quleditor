@@ -3,6 +3,7 @@ from typing import Optional
 from .Object import Object
 from ..structures.Rect import Rect
 from ..structures.Pos import Pos
+from ..structures.Color import Color,ColorConstants
 
 class Container(Object):
     def __init__(self,rect:Rect):
@@ -18,8 +19,11 @@ class Container(Object):
         new_object = Object(Rect(self.content_rect.x,self.content_rect.y
                                     ,object_size.x,object_size.y))
         new_object.margin = 5,5,5,5
-        new_object.border = 3,3,3,3
+        new_object.border = 2,2,2,2
         new_object.padding = 5,5,5,5
+
+        new_object.color = [Color.randomColor() for i in range(4)]
+
 
         self.object_list.append(new_object)
 

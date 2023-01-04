@@ -28,34 +28,30 @@ class Object(object) :
 
         self.__rect: Rect = rect
 
-        self.__margined_color: Optional[Color,None] = None
-        self.__bordered_color: Optional[Color,None] = None
-        self.__padded_color: Optional[Color,None] = None
-        self.__content_color: Optional[Color,None] = None
+        self.margined_color: Optional[Color,None] = None
+        self.bordered_color: Optional[Color,None] = None
+        self.padded_color: Optional[Color,None] = None
+        self.content_color: Optional[Color,None] = None
 
+        self.padding_left = 0
+        self.padding_right = 0
+        self.padding_top = 0
+        self.padding_bottom = 0
 
-        self.__padding_left = 0
-        self.__padding_right = 0
-        self.__padding_top = 0
-        self.__padding_bottom = 0
+        self.margin_left = 0
+        self.margin_right = 0
+        self.margin_top = 0
+        self.margin_bottom = 0
 
-        self.__margin_left = 0
-        self.__margin_right = 0
-        self.__margin_top = 0
-        self.__margin_bottom = 0
+        self.border_left_width = 0
+        self.border_right_width = 0
+        self.border_top_width = 0
+        self.border_bottom_width = 0
 
-        self.__border_left_width = 0
-        self.__border_right_width = 0
-        self.__border_top_width = 0
-        self.__border_bottom_width = 0
-
-        self.__border_color = ColorConstants.BLACK
-
-
-        self.__left_neighbor: Optional[Object,None] = None
-        self.__right_neighbor: Optional[Object,None] = None
-        self.__top_neighbor: Optional[Object,None] = None
-        self.__bottom_neighbor: Optional[Object,None] = None
+        self.left_neighbor: Optional[Object,None] = None
+        self.right_neighbor: Optional[Object,None] = None
+        self.top_neighbor: Optional[Object,None] = None
+        self.bottom_neighbor: Optional[Object,None] = None
 
         self.color = colors.BLUE,colors.BLACK,colors.GREEN,colors.WHITE
 
@@ -69,34 +65,30 @@ class Object(object) :
 
     @property
     def color( self ):
-        return self.__margined_color,self.__bordered_color,self.__padded_color,self.__content_color
+        return self.margined_color,self.bordered_color,self.padded_color,self.content_color
 
     @color.setter
     def color( self,colors_:tuple[Color,Color,Color,Color] ):
-        self.__margined_color = colors_[0]
-        self.__bordered_color = colors_[1]
-        self.__padded_color = colors_[2]
-        self.__content_color = colors_[3]
+        self.margined_color = colors_[0]
+        self.bordered_color = colors_[1]
+        self.padded_color = colors_[2]
+        self.content_color = colors_[3]
 
     @property
     def x( self ):
         return self.__rect.x
 
-
     @property
     def y( self ) :
         return self.__rect.y
-
 
     @property
     def width( self ) :
         return self.__rect.width
 
-
     @property
     def height( self ) :
         return self.__rect.height
-
 
     @property
     def margined_rect( self ):
@@ -110,11 +102,11 @@ class Object(object) :
     def bordered_rect( self ):
         rect = self.margined_rect.copy()
 
-        rect.x += self.__margin_left
-        rect.width -= self.__margin_right * 2
+        rect.x += self.margin_left
+        rect.width -= self.margin_right * 2
 
-        rect.y += self.__margin_top
-        rect.height -= self.__margin_bottom * 2
+        rect.y += self.margin_top
+        rect.height -= self.margin_bottom * 2
 
         return rect
 
@@ -122,11 +114,11 @@ class Object(object) :
     def padded_rect( self ):
         rect = self.bordered_rect.copy()
 
-        rect.x += self.__border_left_width
-        rect.width -= self.__border_right_width * 2
+        rect.x += self.border_left_width
+        rect.width -= self.border_right_width * 2
 
-        rect.y += self.__border_top_width
-        rect.height -= self.__border_bottom_width * 2
+        rect.y += self.border_top_width
+        rect.height -= self.border_bottom_width * 2
 
         return rect
 
@@ -135,11 +127,11 @@ class Object(object) :
     def content_rect( self ) :
         rect = self.padded_rect.copy()
 
-        rect.x += self.__padding_left
-        rect.width -= self.__padding_right * 2
+        rect.x += self.padding_left
+        rect.width -= self.padding_right * 2
 
-        rect.y += self.__padding_top
-        rect.height -= self.__padding_bottom * 2
+        rect.y += self.padding_top
+        rect.height -= self.padding_bottom * 2
 
         return rect
 
@@ -147,60 +139,60 @@ class Object(object) :
 
     @property
     def padding( self ) -> tuple[float,float,float,float]:
-        return self.__padding_left, self.__padding_top, self.__padding_right, self.__padding_bottom
+        return self.padding_left, self.padding_top, self.padding_right, self.padding_bottom
 
 
     @padding.setter
     def padding( self, new_padding: tuple[float, float, float, float] ) :
-        self.__padding_left, self.__padding_top = new_padding[:2]
-        self.__padding_right, self.__padding_bottom = new_padding[2 :]
+        self.padding_left, self.padding_top = new_padding[:2]
+        self.padding_right, self.padding_bottom = new_padding[2 :]
 
 
     @property
     def margin( self ) -> tuple[float,float,float,float] :
-        return self.__margin_left, self.__margin_top, self.__margin_right, self.__margin_bottom
+        return self.margin_left, self.margin_top, self.margin_right, self.margin_bottom
 
 
     @margin.setter
     def margin( self, new_margin: tuple[float, float, float, float] ) :
-        self.__margin_left, self.__margin_top = new_margin[:2]
-        self.__margin_right, self.__margin_bottom = new_margin[2 :]
+        self.margin_left, self.margin_top = new_margin[:2]
+        self.margin_right, self.margin_bottom = new_margin[2 :]
 
 
     @property
     def border( self ) -> tuple[int, int, int, int] :
-        return self.__border_left_width, self.__border_top_width,\
-            self.__border_right_width, self.__border_bottom_width
+        return self.border_left_width, self.border_top_width,\
+            self.border_right_width, self.border_bottom_width
 
 
     @border.setter
     def border( self, new_border: tuple[int, int, int, int] ) :
-        self.__border_left_width, self.__border_top_width = new_border[:2]
-        self.__border_right_width, self.__border_bottom_width = new_border[2 :]
+        self.border_left_width, self.border_top_width = new_border[:2]
+        self.border_right_width, self.border_bottom_width = new_border[2 :]
 
 
     @property
     def neighbors( self ) :
-        return self.__left_neighbor, self.__top_neighbor, \
-                self.__right_neighbor, self.__bottom_neighbor
+        return self.left_neighbor, self.top_neighbor, \
+                self.right_neighbor, self.bottom_neighbor
 
     @neighbors.setter
     def neighbors( self,new_neighbors: tuple ):
-        self.__padding_left, self.__padding_top = new_neighbors[:2]
-        self.__padding_right, self.__padding_bottom = new_neighbors[2 :]
+        self.padding_left, self.padding_top = new_neighbors[:2]
+        self.padding_right, self.padding_bottom = new_neighbors[2 :]
 
     def render( self,surface:pg.surface.Surface ) :
 
         border = [int(i) for i in self.border]
 
-        pg.draw.rect(surface,self.__margined_color
+        pg.draw.rect(surface,self.margined_color
             ,self.margined_rect)
-        pg.draw.rect(surface,self.__bordered_color
+        pg.draw.rect(surface,self.bordered_color
             ,self.bordered_rect)
 
-        pg.draw.rect(surface,self.__padded_color,self.padded_rect)
+        pg.draw.rect(surface,self.padded_color,self.padded_rect)
 
-        pg.draw.rect(surface,self.__content_color,self.content_rect)
+        pg.draw.rect(surface,self.content_color,self.content_rect)
 
     def all_attrs( self ) -> str :
         text = "Object {\n"

@@ -37,7 +37,7 @@ def print_objects():
 
 just_started = True
 clock = pg.time.Clock()
-fps = 30
+fps = 60
 while not window.should_quit :
     window.get_events()
     if window.window_size_changed or just_started:
@@ -46,8 +46,7 @@ while not window.should_quit :
 
 
     if K_a in window.keyboard_held_keys:
-        cube = rand(40,40)
-        cont.create_object(Pos(cube,cube))
+        cont.create_object(Pos(rand(50,50),rand(50,50)))
 
 
     if K_s in window.keyboard_pressed_keys:
