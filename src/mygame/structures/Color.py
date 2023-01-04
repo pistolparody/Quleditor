@@ -1,7 +1,12 @@
 from pygame.color import Color as pg_color
-
+from random import randint
 
 class Color(pg_color) :
+    @staticmethod
+    def randomColor():
+        return Color(randint(0,255),randint(0,255),randint(0,255))
+
+
 
     def __init__( self, r: int = None, g: int = None, b: int = None, a: int = None, color=None ) :
         if r is None : r = 0
