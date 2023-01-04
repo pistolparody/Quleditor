@@ -27,24 +27,25 @@ class Rect(pg_rect):
         return self.x,self.y,self.width,self.height
 
     def reset( self,rect ):
-        self.x,self.y = rect.get_pos()
-        self.width,self.height = rect.get_size()
+        self.x,self.y = rect.pos
+        self.width,self.height = rect.size
         return self
 
     def reset_pos( self,x:int=0,y:int=0,pos:Pos=None ):
         if pos is not None:
             self.x,self.y = int(pos.x),int(pos.y)
-            return
+            return self
 
         self.x,self.y = x,y
+        return self
 
-
-    def reset_size( self, width: int = 0, height: int = 0, size: Pos = None ) :
-        if size is not None :
-            self.width, self.height = int(size.x), int(size.y)
-            return
+    def reset_size( self, width: int = 0, height: int = 0, pos: Pos = None ) :
+        if pos is not None :
+            self.width, self.height = int(pos.x), int(pos.y)
+            return self
 
         self.width, self.height = width, height
+        return self
 
     @property
     def pos( self ) -> Pos:

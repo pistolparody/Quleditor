@@ -39,7 +39,7 @@ class EventHolder:
 
         self.__window_size_changed:bool = False
         self.__window_contains_mouse:bool = False
-        self.__window_size:Pos = Pos(0,0)
+        self.__window_size:Pos = Pos(-1,-1)
         self.__window_has_focus:bool = False
 
         self.__listen_list:list[EventConstants] = []
@@ -51,6 +51,11 @@ class EventHolder:
     @property
     def window_size( self ):
         return self.__window_size
+
+    @window_size.setter
+    def window_size( self,new_size:Pos ):
+        self.__window_size.reset(pos=new_size)
+
 
     @property
     def should_quit( self ):

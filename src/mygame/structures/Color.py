@@ -44,3 +44,8 @@ class ColorConstants:
     GREEN = Color(0,255,0)
     BLUE = Color(0,0,255)
 
+    DEAD_BLUE = Color(150, 150, 220)
+    HOT_RED = Color(70, 30, 30)
+    HAPPY_BLUE = Color(35, 35, 93)
+    GRAY_SKY = Color(180, 180, 195)
+
