@@ -18,7 +18,7 @@ class Container(Object):
         new_object = Object(Rect(self.content_rect.x,self.content_rect.y
                                     ,object_size.x,object_size.y))
         new_object.margin = 5,5,5,5
-        new_object.border = 2,2,2,2
+        new_object.border = 3,3,3,3
         new_object.padding = 5,5,5,5
 
         self.object_list.append(new_object)
@@ -28,15 +28,28 @@ class Container(Object):
     def sync_objects( self ):
         pos = self.content_rect.pos.copy()
 
+        last_line_max_height = 0
+
         last_i = None
         for i in self.object_list:
-            i.margined_rect.reset_pos(pos=pos)
+
             if last_i is not None:
-                if pos.x + last_i.width * 2 < self.content_rect.x + self.content_rect.width:
+                if pos.x + last_i.width + i.width < self.content_rect.x + self.content_rect.width:
                     pos.x += last_i.width
+                    if i.height > last_line_max_height :
+                        last_line_max_height = i.height
                 else:
                     pos.x = self.content_rect.x
-                    pos.y += last_i.height
+                    pos.y += last_line_max_height
+                    last_line_max_height = i.height
+
+            if pos.y + i.height > self.content_rect.x+self.content_rect.height:
+                self.object_list.clear()
+                return
+
+
+            i.margined_rect.reset_pos(pos=pos)
+
             last_i = i
 
 

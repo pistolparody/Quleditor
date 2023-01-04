@@ -1,4 +1,8 @@
 import pygame as pg
+from pygame.locals import *
+
+from random import randint as rand
+
 from mygame.structures.Pos import Pos
 import mygame.os.EventHolder as eventHolder
 from mygame.structures.Rect import Rect
@@ -25,16 +29,31 @@ cont.margin = 10, 10, 10, 10
 cont.border = 5, 5, 5, 5
 cont.padding = 20, 20, 20, 20
 
-for i in range(100):
-    cont.create_object(Pos(47,47))
+def print_objects():
+    print("Container {")
+    for i in cont.object_list:
+        print("\t",i.margined_rect)
+    print("}")
 
 just_started = True
-
+clock = pg.time.Clock()
+fps = 30
 while not window.should_quit :
     window.get_events()
     if window.window_size_changed or just_started:
         cont.margined_rect = window.content_rect.copy()
         cont.sync_objects()
+
+
+    if K_a in window.keyboard_held_keys:
+        cube = rand(100,100)
+        cont.create_object(Pos(cube,cube))
+        print_objects()
+
+    if K_s in window.keyboard_pressed_keys:
+        cube = rand(100,100)
+        cont.create_object(Pos(cube,cube))
+        print_objects()
 
 
     window.check_events()
@@ -43,5 +62,6 @@ while not window.should_quit :
 
 
     window.update()
+    clock.tick(fps)
 
     just_started = False
