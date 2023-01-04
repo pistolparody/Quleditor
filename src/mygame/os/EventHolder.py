@@ -47,6 +47,13 @@ class EventHolder:
         if super_args is not None:
             super(EventHolder, self).__init__(super_args)
 
+    @property
+    def mouse_pos( self ):
+        return self.__mouse_pos
+
+    @property
+    def mouse_rel( self ):
+        return self.__mouse_rel
 
     @property
     def window_size( self ):

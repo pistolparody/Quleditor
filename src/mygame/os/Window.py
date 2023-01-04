@@ -19,7 +19,7 @@ class Window(EventHolder,Object):
         self.window_content_size = content_size
         self.color = colors.DEAD_BLUE, colors.HOT_RED, colors.HAPPY_BLUE, colors.GRAY_SKY
         self.adjust(window_size)
-
+        self.has_boundaries = False
 
 
     def adjust( self,window_new_size:Pos ):
@@ -76,7 +76,7 @@ class Window(EventHolder,Object):
             illegal_size = True
             new_y = self.window_content_size.y
 
-        if illegal_size:
+        if illegal_size and self.has_boundaries:
             self.window_size.reset(new_x,new_y)
             self.surface = pg.display.set_mode([new_x,new_y],RESIZABLE)
             self.adjust(Pos(as_tuple=self.surface.get_size()))

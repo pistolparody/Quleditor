@@ -3,7 +3,9 @@ from .Pos import Pos
 
 class Rect(pg_rect):
 
-    def __init__( self,x:int=0,y:int=0,width:int=0,height:int=0,rect=None ) -> None :
+    def __init__( self,x:float=0,y:float=0,width:float=0,height:float=0,rect=None ) -> None :
+        x,y,width,height = [int(i) for i in [x,y,width,height]]
+
         if rect is not None:
             super().__init__(rect)
             return
@@ -31,7 +33,9 @@ class Rect(pg_rect):
         self.width,self.height = rect.size
         return self
 
-    def reset_pos( self,x:int=0,y:int=0,pos:Pos=None ):
+    def reset_pos( self,x:float=0,y:float=0,pos:Pos=None ):
+        x,y = int(x),int(y)
+
         if pos is not None:
             self.x,self.y = int(pos.x),int(pos.y)
             return self
@@ -39,12 +43,13 @@ class Rect(pg_rect):
         self.x,self.y = x,y
         return self
 
-    def reset_size( self, width: int = 0, height: int = 0, pos: Pos = None ) :
+    def reset_size( self, x: int = 0, y: int = 0, pos: Pos = None ) :
+        x, y = int(x), int(y)
         if pos is not None :
             self.width, self.height = int(pos.x), int(pos.y)
             return self
 
-        self.width, self.height = width, height
+        self.width, self.height = x, y
         return self
 
     @property

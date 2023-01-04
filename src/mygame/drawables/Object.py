@@ -78,6 +78,25 @@ class Object(object) :
         self.__padded_color = colors_[2]
         self.__content_color = colors_[3]
 
+    @property
+    def x( self ):
+        return self.__rect.x
+
+
+    @property
+    def y( self ) :
+        return self.__rect.y
+
+
+    @property
+    def width( self ) :
+        return self.__rect.width
+
+
+    @property
+    def height( self ) :
+        return self.__rect.height
+
 
     @property
     def margined_rect( self ):
@@ -85,7 +104,7 @@ class Object(object) :
 
     @margined_rect.setter
     def margined_rect( self,p_rect:Rect ):
-        self.__rect.reset(p_rect)
+       self.__rect.reset(p_rect)
 
     @property
     def bordered_rect( self ):
