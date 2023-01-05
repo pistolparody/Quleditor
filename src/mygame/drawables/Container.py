@@ -27,10 +27,10 @@ class Container(Object):
             if (i.content_rect.width < 0 or i.content_rect.height < 0) and scale < 1:
                 i.margined_rect = last_margin_rect
 
-            if (i.content_rect.width > 100 or i.content_rect.height > 100) and scale >1:
+            elif (i.content_rect.width > 100 or i.content_rect.height > 100) and scale >1:
                 i.margined_rect = last_margin_rect
 
-            if type(i) == Sprite:
+            elif type(i) == Sprite:
                 i.update()
 
         self.sync_objects()
@@ -48,7 +48,7 @@ class Container(Object):
         new_sprite.color = ColorConstants.BLUE,ColorConstants.BLACK\
                                 ,ColorConstants.RED,ColorConstants.HOT_RED
         new_sprite.color = [Color.randomColor(True) for _ in range(4)]
-        new_sprite.alpha_support = False
+        new_sprite.alpha_support = True
 
         new_sprite.update()
 
@@ -73,9 +73,6 @@ class Container(Object):
                     pos.x = self.content_rect.x
                     pos.y += last_line_max_height
                     last_line_max_height = i.height
-
-
-
 
             i.margined_rect.reset_pos(pos=pos)
 
