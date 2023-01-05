@@ -127,7 +127,7 @@ class EventHolder:
 
             if EventConstants.WINDOW in self.__listen_list:
                 if i.type == QUIT:
-                    self.__should_quit = True
+                    self.should_quit = True
                 elif i.type == WINDOWSIZECHANGED:
                     self.__window_size.reset(i.x,i.y)
                     self.__window_size_changed = True

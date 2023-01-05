@@ -1,6 +1,7 @@
 import pygame as pg
 from typing import Optional
 from .Object import Object
+from .Sprite import Sprite
 from ..structures.Rect import Rect
 from ..structures.Pos import Pos
 from ..structures.Color import Color,ColorConstants
@@ -16,16 +17,16 @@ class Container(Object):
             i.render(surface)
 
     def create_object( self,object_size:Pos ):
-        new_object = Object(Rect(self.content_rect.x,self.content_rect.y
+        new_sprite = Sprite(Rect(self.content_rect.x,self.content_rect.y
                                     ,object_size.x,object_size.y))
-        new_object.margin = 5,5,5,5
-        new_object.border = 2,2,2,2
-        new_object.padding = 5,5,5,5
+        new_sprite.margin = 5,5,5,5
+        new_sprite.border = 2,2,2,2
+        new_sprite.padding = 5,5,5,5
 
-        new_object.color = [Color.randomColor(True) for i in range(4)]
-        new_object.alpha_support = True
+        new_sprite.color = [Color.randomColor(True) for i in range(4)]
+        new_sprite.alpha_support = True
 
-        self.object_list.append(new_object)
+        self.object_list.append(new_sprite)
 
         self.sync_objects()
 
@@ -47,9 +48,7 @@ class Container(Object):
                     pos.y += last_line_max_height
                     last_line_max_height = i.height
 
-            if pos.y + i.height > self.content_rect.y+self.content_rect.height:
-                self.object_list.clear()
-                return
+
 
 
             i.margined_rect.reset_pos(pos=pos)
