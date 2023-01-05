@@ -53,6 +53,14 @@ while not window.should_quit :
         cube = rand(40,40)
         cont.create_object(Pos(cube,cube))
 
+    if K_d in window.keyboard_held_keys or K_c in window.keyboard_pressed_keys:
+        cont.resize_objects(0.95)
+
+    if K_f in window.keyboard_held_keys or K_v in window.keyboard_pressed_keys:
+        cont.resize_objects(1.05)
+
+    if K_q in window.keyboard_pressed_keys:
+        cont.object_list.clear()
 
 
     window.check_events()

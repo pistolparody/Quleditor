@@ -15,8 +15,22 @@ class Sprite(Object):
 
         self.path = "../assets/openme.jpg"
         self.raw = pg.image.load(self.path)
+        self.transformed = self.raw.copy()
+        self.transform_picture()
 
 
+    def update( self ):
+        self.transform_picture()
+
+    def transform_picture( self ):
+        try:
+            self.transformed = pg.transform.scale(self.raw,self.content_rect.size)
+        except ValueError as v:
+            print(v,self.content_rect.size)
+
+    @Object.margined_rect.setter
+    def margined_rect( self, new_margined_rect: Rect ) :
+        super(Sprite, self.__class__).margined_rect.fset(self, new_margined_rect)  # type: ignore
 
     @Object.margin.setter
     def margin( self, new_margin: tuple[float, float, float, float] ) :
@@ -36,7 +50,8 @@ class Sprite(Object):
 
     def render( self, surface: pg.surface.Surface ) :
         super().render(surface)
-        surface.blit(self.raw,self.content_rect)
+        surface.blit(self.transformed,self.content_rect.pos)
+        # pg.draw.rect(surface,Color.randomColor(),self.content_rect)
 
 
 
