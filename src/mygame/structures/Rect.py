@@ -43,6 +43,43 @@ class Rect(pg_rect):
         self.x,self.y = x,y
         return self
 
+
+    def transform_pos( self, sum_xy: float = 0, sum_y: float = None, mult_xy: float = 1,
+            mult_y: float = None ) :
+        copy_cat = self.pos.copy()
+
+        if sum_y is None :
+            copy_cat.sum_me(sum_xy, sum_xy)
+        else :
+            copy_cat.sum_me(sum_xy, sum_y)
+
+        if mult_y is None :
+            copy_cat.mult_me(mult_xy, mult_xy)
+        else :
+            copy_cat.mult_me(mult_xy, mult_y)
+
+        self.reset_pos(pos=copy_cat)
+
+        return self
+
+    def transform_size( self, sum_xy: float = 0, sum_y: float = None, mult_xy: float = 1,
+            mult_y: float = None ) :
+        copy_cat = self.size.copy()
+
+        if sum_y is None :
+            copy_cat.sum_me(sum_xy, sum_xy)
+        else :
+            copy_cat.sum_me(sum_xy, sum_y)
+
+        if mult_y is None :
+            copy_cat.mult_me(mult_xy, mult_xy)
+        else :
+            copy_cat.mult_me(mult_xy, mult_y)
+
+        self.reset_size(pos=copy_cat)
+
+        return self
+
     def reset_size( self, x: int = 0, y: int = 0, pos: Pos = None ) :
         x, y = int(x), int(y)
         if pos is not None :

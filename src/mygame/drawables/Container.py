@@ -23,7 +23,8 @@ class Container(Object):
         new_object.padding = 5,5,5,5
 
         new_object.color = [Color.randomColor() for i in range(4)]
-
+        new_object.margined_color = ColorConstants.GLASS
+        new_object.alpha_support = True
 
         self.object_list.append(new_object)
 

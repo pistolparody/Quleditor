@@ -28,6 +28,8 @@ class Object(object) :
 
         self.__rect: Rect = rect
 
+        self.alpha_support:bool = False
+
         self.margined_color: Optional[Color,None] = None
         self.bordered_color: Optional[Color,None] = None
         self.padded_color: Optional[Color,None] = None
@@ -48,11 +50,6 @@ class Object(object) :
         self.border_top_width = 0
         self.border_bottom_width = 0
 
-        self.left_neighbor: Optional[Object,None] = None
-        self.right_neighbor: Optional[Object,None] = None
-        self.top_neighbor: Optional[Object,None] = None
-        self.bottom_neighbor: Optional[Object,None] = None
-
         self.color = colors.BLUE,colors.BLACK,colors.GREEN,colors.WHITE
 
 
@@ -61,7 +58,7 @@ class Object(object) :
     def __str__(self):
         return f'Object{{\n\trect:{self.margined_rect}\n\tmargin:{self.margin}'\
                f'\n\tborder:{self.border}'\
-               f'\n\tpadding:{self.padding}\n\tneighbors:{self.neighbors}\n}}'
+               f'\n\tpadding:{self.padding}\n}}'
 
     @property
     def color( self ):
@@ -170,29 +167,32 @@ class Object(object) :
         self.border_left_width, self.border_top_width = new_border[:2]
         self.border_right_width, self.border_bottom_width = new_border[2 :]
 
-
-    @property
-    def neighbors( self ) :
-        return self.left_neighbor, self.top_neighbor, \
-                self.right_neighbor, self.bottom_neighbor
-
-    @neighbors.setter
-    def neighbors( self,new_neighbors: tuple ):
-        self.padding_left, self.padding_top = new_neighbors[:2]
-        self.padding_right, self.padding_bottom = new_neighbors[2 :]
-
     def render( self,surface:pg.surface.Surface ) :
 
-        border = [int(i) for i in self.border]
+        if self.alpha_support:
+            temp_surface = pg.surface.Surface(self.margined_rect.size).convert_alpha()
 
-        pg.draw.rect(surface,self.margined_color
-            ,self.margined_rect)
-        pg.draw.rect(surface,self.bordered_color
-            ,self.bordered_rect)
+            pg.draw.rect(temp_surface, self.margined_color
+                            , self.margined_rect.copy().transform_pos(
+                sum_xy=-self.x,
+                sum_y=-self.y
+            ))
 
-        pg.draw.rect(surface,self.padded_color,self.padded_rect)
+            pg.draw.rect(temp_surface, self.bordered_color,
+                self.bordered_rect.copy().transform_pos(sum_xy=-self.x, sum_y=-self.y))
 
-        pg.draw.rect(surface,self.content_color,self.content_rect)
+            pg.draw.rect(temp_surface, self.padded_color,
+                self.padded_rect.copy().transform_pos(sum_xy=-self.x, sum_y=-self.y))
+
+            pg.draw.rect(temp_surface, self.content_color,
+                self.content_rect.copy().transform_pos(sum_xy=-self.x, sum_y=-self.y))
+
+            surface.blit(temp_surface,self.margined_rect)
+        else:
+            pg.draw.rect(surface,self.margined_color,self.margined_rect)
+            pg.draw.rect(surface,self.bordered_color,self.bordered_rect)
+            pg.draw.rect(surface,self.padded_color,self.padded_rect)
+            pg.draw.rect(surface,self.content_color,self.content_rect)
 
     def all_attrs( self ) -> str :
         text = "Object {\n"

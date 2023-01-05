@@ -44,6 +44,7 @@ class Color(pg_color) :
 class ColorConstants:
     BLACK = Color(0,0,0)
     WHITE = Color(255,255,255)
+    GLASS = Color(0,0,0,0)
 
     RED = Color(255,0,0)
     GREEN = Color(0,255,0)

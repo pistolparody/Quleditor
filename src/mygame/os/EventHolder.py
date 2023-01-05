@@ -35,7 +35,7 @@ class EventHolder:
         self.__keyboard_pressed_keys:list = []
         self.__keyboard_released_keys:list = []
 
-        self.__should_quit:bool = False
+        self.should_quit:bool = False
 
         self.__window_size_changed:bool = False
         self.__window_contains_mouse:bool = False
@@ -63,18 +63,9 @@ class EventHolder:
     def window_size( self,new_size:Pos ):
         self.__window_size.reset(pos=new_size)
 
-
-    @property
-    def should_quit( self ):
-        return self.__should_quit
-
     @property
     def window_size_changed( self ):
         return self.__window_size_changed
-
-    @should_quit.setter
-    def should_quit( self,value:bool ) :
-        self.__should_quit = value
 
     @property
     def keyboard_held_keys( self ):
