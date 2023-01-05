@@ -3,8 +3,10 @@ from random import randint
 
 class Color(pg_color) :
     @staticmethod
-    def randomColor():
-        return Color(randint(0,255),randint(0,255),randint(0,255))
+    def randomColor(include_alpha:bool=False):
+        alpha = 255
+        if include_alpha: alpha = randint(0,255)
+        return Color(randint(0,255),randint(0,255),randint(0,255),alpha)
 
 
 
