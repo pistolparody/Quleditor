@@ -161,38 +161,42 @@ class Object(object) :
         return self.border_left_width, self.border_top_width,\
             self.border_right_width, self.border_bottom_width
 
-
     @border.setter
     def border( self, new_border: tuple[int, int, int, int] ) :
         self.border_left_width, self.border_top_width = new_border[:2]
         self.border_right_width, self.border_bottom_width = new_border[2 :]
 
-    def render( self,surface:pg.surface.Surface ) :
+    def render( self,surface:pg.surface.Surface,pos_adjust:Pos = None ) :
+        if pos_adjust is None: pos_adjust = Pos(0,0)
+
+        margined_rect = self.margined_rect.copy().transform_pos(pos_adjust.x,pos_adjust.y)
+        bordered_rect = self.bordered_rect.copy().transform_pos(pos_adjust.x,pos_adjust.y)
+        padded_rect = self.padded_rect.copy().transform_pos(pos_adjust.x,pos_adjust.y)
+        content_rect = self.content_rect.copy().transform_pos(pos_adjust.x,pos_adjust.y)
 
         if self.alpha_support:
-            temp_surface = pg.surface.Surface(self.margined_rect.size).convert_alpha()
+            temp_surface = pg.surface.Surface(margined_rect.size).convert_alpha()
+
+            diff = Pos(-self.x - pos_adjust.x, -self.y - pos_adjust.y)
 
             pg.draw.rect(temp_surface, self.margined_color
-                            , self.margined_rect.copy().transform_pos(
-                sum_xy=-self.x,
-                sum_y=-self.y
-            ))
+                            , margined_rect.copy().transform_pos(sum_xy=diff.x, sum_y=diff.y))
 
             pg.draw.rect(temp_surface, self.bordered_color,
-                self.bordered_rect.copy().transform_pos(sum_xy=-self.x, sum_y=-self.y))
+                bordered_rect.copy().transform_pos(sum_xy=diff.x, sum_y=diff.y))
 
             pg.draw.rect(temp_surface, self.padded_color,
-                self.padded_rect.copy().transform_pos(sum_xy=-self.x, sum_y=-self.y))
+                padded_rect.copy().transform_pos(sum_xy=diff.x, sum_y=diff.y))
 
             pg.draw.rect(temp_surface, self.content_color,
-                self.content_rect.copy().transform_pos(sum_xy=-self.x, sum_y=-self.y))
+                content_rect.copy().transform_pos(sum_xy=diff.x, sum_y=diff.y))
 
-            surface.blit(temp_surface,self.margined_rect)
+            surface.blit(temp_surface,margined_rect)
         else:
-            pg.draw.rect(surface,self.margined_color,self.margined_rect)
-            pg.draw.rect(surface,self.bordered_color,self.bordered_rect)
-            pg.draw.rect(surface,self.padded_color,self.padded_rect)
-            pg.draw.rect(surface,self.content_color,self.content_rect)
+            pg.draw.rect(surface,self.margined_color,margined_rect)
+            pg.draw.rect(surface,self.bordered_color,bordered_rect)
+            pg.draw.rect(surface,self.padded_color,padded_rect)
+            pg.draw.rect(surface,self.content_color,content_rect)
 
     def all_attrs( self ) -> str :
         text = "Object {\n"

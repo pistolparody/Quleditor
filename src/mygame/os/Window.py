@@ -85,8 +85,6 @@ class Window(EventHolder,Object):
     def render_screen( self ):
         Object.render(self,self.surface)
 
-
-
     def update( self ):
         pg.display.update()
 

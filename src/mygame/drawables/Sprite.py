@@ -48,9 +48,10 @@ class Sprite(Object):
         super(Sprite, self.__class__).padding.fset(self, new_padding)  # type: ignore
 
 
-    def render( self, surface: pg.surface.Surface ) :
-        super().render(surface)
-        surface.blit(self.transformed,self.content_rect.pos)
+    def render( self, surface: pg.surface.Surface ,pos_adjust:Pos = None) :
+        if pos_adjust is None: pos_adjust = Pos(0,0)
+        super().render(surface,pos_adjust.copy())
+        surface.blit(self.transformed,self.content_rect.pos.join(pos_adjust))
         # pg.draw.rect(surface,Color.randomColor(),self.content_rect)
 
 

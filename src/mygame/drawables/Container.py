@@ -11,10 +11,10 @@ class Container(Object):
         super(Container, self).__init__(rect)
         self.object_list :list[Sprite] = []
 
-    def render( self,surface:pg.surface.Surface ):
-        super(Container, self).render(surface)
+    def render( self,surface:pg.surface.Surface,pos_adjust:Pos = None ):
+        super(Container, self).render(surface,pos_adjust)
         for i in self.object_list:
-            i.render(surface)
+            i.render(surface,pos_adjust)
 
     def resize_objects( self,scale:float ):
 

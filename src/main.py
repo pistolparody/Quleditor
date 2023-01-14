@@ -38,6 +38,8 @@ def print_objects():
 just_started = True
 clock = pg.time.Clock()
 fps = 60
+adjust_pos = Pos(0,0)
+adjust_step = 2
 while not window.should_quit :
     window.get_events()
     if window.window_size_changed or just_started:
@@ -62,10 +64,14 @@ while not window.should_quit :
     if K_q in window.keyboard_pressed_keys:
         cont.object_list.clear()
 
+    if K_UP in window.keyboard_held_keys: adjust_pos.y -= adjust_step
+    if K_DOWN in window.keyboard_held_keys : adjust_pos.y += adjust_step
+    if K_RIGHT in window.keyboard_held_keys : adjust_pos.x += adjust_step
+    if K_LEFT in window.keyboard_held_keys : adjust_pos.x -= adjust_step
 
     window.check_events()
     window.render_screen()
-    cont.render(window.surface)
+    cont.render(window.surface,adjust_pos)
 
 
     window.update()
